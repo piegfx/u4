@@ -6,4 +6,8 @@
         <Nullable>disable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Pie.Windowing" Version="0.10.1" />
+    </ItemGroup>
+
 </Project>

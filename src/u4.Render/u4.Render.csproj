@@ -6,4 +6,8 @@
         <Nullable>disable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Pie" Version="0.10.1" />
+    </ItemGroup>
+
 </Project>
