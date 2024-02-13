@@ -10,4 +10,11 @@
       <PackageReference Include="Pie.Windowing" Version="0.10.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\u4.Audio\u4.Audio.csproj" />
+      <ProjectReference Include="..\u4.Core\u4.Core.csproj" />
+      <ProjectReference Include="..\u4.Math\u4.Math.csproj" />
+      <ProjectReference Include="..\u4.Render\u4.Render.csproj" />
+    </ItemGroup>
+
 </Project>
