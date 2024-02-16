@@ -1,6 +1,7 @@
 ﻿using Pie;
 using Pie.Windowing;
 using u4.Core;
+using u4.Render;
 
 namespace u4.Engine;
 
@@ -30,9 +31,14 @@ public static class App
             .Title(options.Title)
             .GraphicsDeviceOptions(deviceOptions);
 
-        Window.PieWindow = builder.Build();
+        Window.Initialize(builder.Build());
+        Window.CloseRequested += WindowOnCloseRequested;
 
+        Logger.Debug("Initializing graphics subsystem.");
         GraphicsDevice device = Window.PieWindow.CreateGraphicsDevice(deviceOptions);
+        Graphics.Initialize(device);
+        
+        Window.EngineTitle = $" - {device.Api}";
 
         _isAlive = true;
 
@@ -40,7 +46,18 @@ public static class App
         {
             Window.ProcessEvents();
             
-            device.Present(1);
+            Graphics.Present();
         }
+        
+        Logger.Trace("Disposing graphics.");
+        Graphics.Deinitialize();
+        
+        Logger.Trace("Disposing window.");
+        Window.PieWindow.Dispose();
+    }
+
+    private static void WindowOnCloseRequested()
+    {
+        _isAlive = false;
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Pie.Windowing;
 using Pie.Windowing.Events;
 using u4.Math;
@@ -12,6 +11,8 @@ public static class Window
     private static string _engineTitle;
     
     internal static Pie.Windowing.Window PieWindow;
+
+    public static event OnCloseRequested CloseRequested = delegate { };
 
     internal static string EngineTitle
     {
@@ -90,6 +91,13 @@ public static class Window
 
     public static void Restore() => PieWindow.Restore();
 
+    internal static void Initialize(Pie.Windowing.Window window)
+    {
+        PieWindow = window;
+
+        _userTitle = window.Title;
+    }
+    
     internal static void ProcessEvents()
     {
         while (PieWindow.PollEvent(out IWindowEvent winEvent))
@@ -97,9 +105,11 @@ public static class Window
             switch (winEvent)
             {
                 case QuitEvent:
-                    Console.WriteLine("asdasda");
+                    CloseRequested.Invoke();
                     break;
             }
         }
     }
+
+    public delegate void OnCloseRequested();
 }
