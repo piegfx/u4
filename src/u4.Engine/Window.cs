@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Pie.Windowing;
+using Pie.Windowing.Events;
 using u4.Math;
 
 namespace u4.Engine;
@@ -87,4 +89,17 @@ public static class Window
     public static void Minimize() => PieWindow.Minimize();
 
     public static void Restore() => PieWindow.Restore();
+
+    internal static void ProcessEvents()
+    {
+        while (PieWindow.PollEvent(out IWindowEvent winEvent))
+        {
+            switch (winEvent)
+            {
+                case QuitEvent:
+                    Console.WriteLine("asdasda");
+                    break;
+            }
+        }
+    }
 }

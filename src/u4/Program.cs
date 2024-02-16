@@ -1,10 +1,15 @@
 ﻿using u4.Core;
+using u4.Engine;
+using u4.Math;
 
 Logger.AttachConsole();
 
-Logger.Trace("Trace message.");
-Logger.Debug("Debug message.");
-Logger.Info("Info message.");
-Logger.Warn("Warn message.");
-Logger.Error("Error message.");
-Logger.Fatal("Fatal message.");
+LaunchOptions options = new LaunchOptions()
+{
+    AppName = "Test",
+    Version = "1.0.0",
+    Size = new Size<int>(1280, 720),
+    Title = "Test"
+};
+
+App.Run(options);
