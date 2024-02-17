@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "u4.Audio", "src\u4.Audio\u4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "u4", "src\u4\u4.csproj", "{FD6B26EB-5879-4F95-84D3-BB84DF6077E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{03D5212E-DA5F-40E6-802D-3BC33B50487C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Graphics", "tests\Tests.Graphics\Tests.Graphics.csproj", "{07B75100-FA35-4877-B027-6FD6794AC446}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +46,12 @@ Global
 		{FD6B26EB-5879-4F95-84D3-BB84DF6077E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD6B26EB-5879-4F95-84D3-BB84DF6077E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD6B26EB-5879-4F95-84D3-BB84DF6077E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B75100-FA35-4877-B027-6FD6794AC446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B75100-FA35-4877-B027-6FD6794AC446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B75100-FA35-4877-B027-6FD6794AC446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B75100-FA35-4877-B027-6FD6794AC446}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07B75100-FA35-4877-B027-6FD6794AC446} = {03D5212E-DA5F-40E6-802D-3BC33B50487C}
 	EndGlobalSection
 EndGlobal
