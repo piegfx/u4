@@ -12,11 +12,17 @@ public static class App
     public static string Name { get; private set; }
     
     public static string Version { get; private set; }
+
+    public static Game Game;
     
-    public static void Run(LaunchOptions options)
+    public static void Run(LaunchOptions options, Game game)
     {
         Name = options.AppName;
         Version = options.Version;
+        
+        Logger.Info($"{Name} {Version}, starting up.");
+
+        Game = game;
 
         GraphicsDeviceOptions deviceOptions = new GraphicsDeviceOptions()
         {
@@ -32,19 +38,25 @@ public static class App
             .GraphicsDeviceOptions(deviceOptions);
 
         Window.Initialize(builder.Build());
-        Window.CloseRequested += WindowOnCloseRequested;
+        Window.CloseRequested += Quit;
 
         Logger.Debug("Initializing graphics subsystem.");
         GraphicsDevice device = Window.PieWindow.CreateGraphicsDevice(deviceOptions);
         Graphics.Initialize(device);
         
         Window.EngineTitle = $" - {device.Api}";
+        
+        Logger.Debug("Initializing user code.");
+        Game.Initialize();
 
         _isAlive = true;
 
         while (_isAlive)
         {
             Window.ProcessEvents();
+            
+            Game.Update(1.0f);
+            Game.Draw();
             
             Graphics.Present();
         }
@@ -56,7 +68,7 @@ public static class App
         Window.PieWindow.Dispose();
     }
 
-    private static void WindowOnCloseRequested()
+    public static void Quit()
     {
         _isAlive = false;
     }
