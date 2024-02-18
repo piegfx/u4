@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "u4", "src\u4\u4.csproj", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{03D5212E-DA5F-40E6-802D-3BC33B50487C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Graphics", "tests\Tests.Graphics\Tests.Graphics.csproj", "{07B75100-FA35-4877-B027-6FD6794AC446}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Render", "tests\Tests.Render\Tests.Render.csproj", "{07B75100-FA35-4877-B027-6FD6794AC446}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

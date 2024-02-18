@@ -1,7 +1,7 @@
 ﻿using u4.Math;
 using u4.Render;
 
-namespace Tests.Graphics.Apps;
+namespace Tests.Render.Apps;
 
 public class SpriteTest : TestApp
 {
@@ -10,6 +10,6 @@ public class SpriteTest : TestApp
         base.Draw();
 
         Color clearColor = Color.CornflowerBlue;
-        GraphicsDevice.ClearColorBuffer(clearColor);
+        Graphics.Device.ClearColorBuffer(clearColor);
     }
 }

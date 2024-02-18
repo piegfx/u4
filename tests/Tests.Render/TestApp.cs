@@ -3,13 +3,13 @@ using System.Diagnostics;
 using Pie;
 using Pie.Windowing;
 using Pie.Windowing.Events;
+using u4.Render;
 
-namespace Tests.Graphics;
+namespace Tests.Render;
 
 public abstract class TestApp : IDisposable
 {
     protected Window Window;
-    protected GraphicsDevice GraphicsDevice;
     
     protected virtual void Initialize() { }
 
@@ -22,7 +22,9 @@ public abstract class TestApp : IDisposable
         Window = new WindowBuilder()
             .Size(1280, 720)
             .Title("Graphics Tests")
-            .Build(out GraphicsDevice);
+            .Build(out GraphicsDevice device);
+        
+        u4.Render.Graphics.Initialize(device);
         
         Initialize();
         
@@ -47,13 +49,13 @@ public abstract class TestApp : IDisposable
             Update(delta);
             Draw();
             
-            GraphicsDevice.Present(1);
+            Graphics.Present();
         }
     }
 
     public virtual void Dispose()
     {
-        GraphicsDevice.Dispose();
+        Graphics.Deinitialize();
         Window.Dispose();
     }
 }
