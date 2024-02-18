@@ -16,4 +16,9 @@
       <ProjectReference Include="..\u4.Math\u4.Math.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ClCompile Include="Shaders\Sprite\Sprite.hlsl" />
+      <ClCompile Include="Shaders\Test.hlsl" />
+    </ItemGroup>
+
 </Project>

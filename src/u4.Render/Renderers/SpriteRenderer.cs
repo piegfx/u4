@@ -24,6 +24,11 @@ public sealed class SpriteRenderer : IDisposable
     private readonly GraphicsBuffer _vertexBuffer;
     private readonly GraphicsBuffer _indexBuffer;
 
+    private readonly GraphicsBuffer _transformBuffer;
+
+    private Shader _shader;
+    private InputLayout _inputLayout;
+
     public SpriteRenderer(GraphicsDevice device)
     {
         _device = device;
@@ -33,6 +38,10 @@ public sealed class SpriteRenderer : IDisposable
 
         _vertexBuffer = device.CreateBuffer(BufferType.VertexBuffer, MaxVertices * Vertex.SizeInBytes, true);
         _indexBuffer = device.CreateBuffer(BufferType.IndexBuffer, MaxVertices * sizeof(uint), true);
+
+        _transformBuffer = device.CreateBuffer(BufferType.UniformBuffer, Matrix4x4.Identity, true);
+        
+        
     }
     
     public void Dispose()
