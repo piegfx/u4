@@ -1,8 +1,12 @@
 ﻿#!/usr/bin/python3
+# AG Games Auto-HLSL-To-Spirv Shader Compiler 1.0
+# Works in the current working directory, so make sure the current directory is the one with the shaders you wish to
+# compile.
+# While it will recurse all available subdirectories as well, this can take a lot of time if there are a lot of files.
+# This may be updated later to support choosing a directory.
 
 import os
-import subprocess
-from subprocess import Popen
+from subprocess import run
 from shutil import which
 
 
@@ -18,7 +22,7 @@ def recurse_files(path: str, files: list[str]):
 
 
 if __name__ == "__main__":
-    print("Shader compiler\n(c) AG Games 2024")
+    print("AG Games Shader Compiler\n(c) AG Games 2024")
 
     print("Checking for DXC... ", end="")
     if which("dxc") is None:
@@ -50,19 +54,20 @@ if __name__ == "__main__":
 
             if VERTEX_ENTRYPOINT in f_text:
                 print("Vertex... ", end="")
-                output = Popen(["dxc", "-spirv", "-T", "vs_6_0", "-E", VERTEX_ENTRYPOINT, "-Fo", f"{file_name}_vert.spv", file], stdout=subprocess.PIPE)
-                output.poll()
-                print(output.returncode)
+                output = run(["dxc", "-spirv", "-T", "vs_6_0", "-E", VERTEX_ENTRYPOINT, "-Fo", f"{file_name}_vert.spv", file], capture_output=True)
                 if output.returncode != 0:
                     print("Failed.")
-                    print(output.stdout.read())
+                    print(output.stderr.decode('UTF-8'))
                     exit(1)
 
             if PIXEL_ENTRYPOINT in f_text:
                 print("Pixel... ", end="")
-                output = Popen(["dxc", "-spirv", "-T", "ps_6_0", "-E", PIXEL_ENTRYPOINT, "-Fo", f"{file_name}_frag.spv", file], stdout=subprocess.PIPE)
+                output = run(["dxc", "-spirv", "-T", "ps_6_0", "-E", PIXEL_ENTRYPOINT, "-Fo", f"{file_name}_frag.spv", file], capture_output=True)
                 if output.returncode != 0:
                     print("Failed.")
-                    print(output.stdout.read())
+                    print(output.stderr.decode('UTF-8'))
+                    exit(1)
 
         print("Done.")
+
+    print("All done. Compilation successful for all shaders.")

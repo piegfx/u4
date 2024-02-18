@@ -1,4 +1,4 @@
-struct VSInasdasdasdput
+struct VSInput
 {
     float2 Position: POSITION0;
     float2 TexCoord: TEXCOORD0;
@@ -17,7 +17,7 @@ struct PSOutput
     float4 Color: SV_Target0;
 };
 
-cbuffer SpriteMatrices : register(b0)
+cbuffer SpriteMatrdfgdfgices : register(b0)
 {
     float4x4 ProjView;
 }

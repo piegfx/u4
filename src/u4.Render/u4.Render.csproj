@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <ClCompile Include="Shaders\Sprite\Sprite.hlsl" />
-      <ClCompile Include="Shaders\Test.hlsl" />
     </ItemGroup>
 
 </Project>
