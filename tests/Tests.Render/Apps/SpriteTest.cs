@@ -8,12 +8,20 @@ namespace Tests.Render.Apps;
 public class SpriteTest : TestApp
 {
     private Texture _texture;
+    private float _value;
 
     protected override void Initialize()
     {
         base.Initialize();
 
-        _texture = new Texture(@"C:\Users\ollie\Pictures\awesomeface.png");
+        _texture = new Texture(@"C:\Users\ollie\Pictures\BAGELMIP.png");
+    }
+
+    protected override void Update(float dt)
+    {
+        base.Update(dt);
+
+        _value += 1 * dt;
     }
 
     protected override void Draw()
@@ -26,8 +34,12 @@ public class SpriteTest : TestApp
         ref SpriteRenderer renderer = ref Graphics.SpriteRenderer;
         
         renderer.Begin();
-        renderer.Draw(_texture, new Vector2(0, 0), new Vector2(1280, 0), new Vector2(0, 512), new Vector2(512, 512),
-            Color.Red);
+
+        for (int i = 0; i < 10; i++)
+        {
+            renderer.Draw(_texture, new Vector2(i * 50));
+        }
+        
         renderer.End();
     }
 }

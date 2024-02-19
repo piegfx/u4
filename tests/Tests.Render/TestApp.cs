@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Pie;
 using Pie.Windowing;
 using Pie.Windowing.Events;
+using u4.Math;
 using u4.Render;
 
 namespace Tests.Render;
@@ -22,9 +23,10 @@ public abstract class TestApp : IDisposable
         Window = new WindowBuilder()
             .Size(1280, 720)
             .Title("Graphics Tests")
+            .Resizable()
             .Build(out GraphicsDevice device);
         
-        u4.Render.Graphics.Initialize(device);
+        Graphics.Initialize(device);
         
         Initialize();
         
@@ -39,6 +41,10 @@ public abstract class TestApp : IDisposable
                 {
                     case QuitEvent:
                         isAlive = false;
+                        break;
+                    
+                    case ResizeEvent newSize:
+                        Graphics.Resize(new Size<int>(newSize.Width, newSize.Height));
                         break;
                 }
             }

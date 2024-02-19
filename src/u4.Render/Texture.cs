@@ -8,12 +8,16 @@ public class Texture : IDisposable
 {
     public readonly Pie.Texture PieTexture;
 
+    public readonly Size<int> Size;
+
     public Texture(string path) : this(new Bitmap(path)) { }
 
     public Texture(Bitmap bitmap) : this(bitmap.Data, bitmap.Size, bitmap.Format) { }
 
     public Texture(byte[] data, Size<int> size, Format format = Format.R8G8B8A8_UNorm)
     {
+        Size = size;
+        
         GraphicsDevice device = Graphics.Device;
 
         TextureDescription description =

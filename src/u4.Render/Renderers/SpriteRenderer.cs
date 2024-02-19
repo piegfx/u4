@@ -99,6 +99,23 @@ public sealed class SpriteRenderer : IDisposable
         _isBegun = false;
         Flush();
     }
+    
+    public void Draw(Texture texture, Vector2 position)
+        => Draw(texture, position, Color.White, 0, Vector2.One, Vector2.Zero);
+
+    public void Draw(Texture texture, Vector2 position, Color tint, float rotation, Vector2 scale, Vector2 origin)
+    {
+        Size<int> size = texture.Size;
+
+        Matrix4x4 transform = Matrix4x4.CreateRotationZ(rotation);
+
+        Vector2 topLeft = Vector2.Transform(-origin * scale + position, transform);
+        Vector2 topRight = Vector2.Transform(-origin * scale + position + new Vector2(size.Width, 0) * scale, transform);
+        Vector2 bottomLeft = Vector2.Transform(-origin * scale + position + new Vector2(0, size.Height) * scale, transform);
+        Vector2 bottomRight = Vector2.Transform(-origin * scale + position + new Vector2(size.Width, size.Height) * scale, transform);
+        
+        Draw(texture, topLeft, topRight, bottomLeft, bottomRight, tint);
+    }
 
     public void Draw(Texture texture, Vector2 topLeft, Vector2 topRight, Vector2 bottomLeft, Vector2 bottomRight,
         Color tint)
@@ -155,6 +172,8 @@ public sealed class SpriteRenderer : IDisposable
         _device.SetIndexBuffer(_indexBuffer, IndexType.UInt);
         
         _device.DrawIndexed(NumIndices * _currentSprite);
+
+        _currentSprite = 0;
     }
     
     public void Dispose()

@@ -1,5 +1,6 @@
 ﻿using Pie;
 using u4.Core;
+using u4.Math;
 using u4.Render.Renderers;
 
 namespace u4.Render;
@@ -22,6 +23,11 @@ public static class Graphics
     {
         SpriteRenderer.Dispose();
         Device.Dispose();
+    }
+
+    public static void Resize(in Size<int> size)
+    {
+        Device.ResizeSwapchain((System.Drawing.Size) size);
     }
 
     public static void Present()
