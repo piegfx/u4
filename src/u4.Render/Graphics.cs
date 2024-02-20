@@ -13,12 +13,15 @@ public static class Graphics
 
     public static Renderer Renderer;
 
-    public static void Initialize(GraphicsDevice device)
+    public static void Initialize(GraphicsDevice device, Size<int> size)
     {
         Device = device;
 
         Logger.Trace("Creating sprite renderer.");
         SpriteRenderer = new SpriteRenderer(device);
+        
+        Logger.Trace("Creating main renderer.");
+        Renderer = new DeferredRenderer(device, size);
     }
 
     public static void Deinitialize()

@@ -20,13 +20,15 @@ public abstract class TestApp : IDisposable
 
     public void Run()
     {
+        Size<int> winSize = new Size<int>(1280, 720);
+        
         Window = new WindowBuilder()
-            .Size(1280, 720)
+            .Size(winSize.Width, winSize.Height)
             .Title("Graphics Tests")
             .Resizable()
             .Build(out GraphicsDevice device);
         
-        Graphics.Initialize(device);
+        Graphics.Initialize(device, winSize);
         
         Initialize();
         

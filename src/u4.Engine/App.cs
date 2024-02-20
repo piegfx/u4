@@ -42,7 +42,7 @@ public static class App
 
         Logger.Debug("Initializing graphics subsystem.");
         GraphicsDevice device = Window.PieWindow.CreateGraphicsDevice(deviceOptions);
-        Graphics.Initialize(device);
+        Graphics.Initialize(device, options.Size);
         
         Window.EngineTitle = $" - {device.Api}";
         
