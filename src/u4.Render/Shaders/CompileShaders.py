@@ -27,6 +27,7 @@ if __name__ == "__main__":
     print("Checking for DXC... ", end="")
     if which("dxc") is None:
         print("Not found.")
+        print("Failed. Could not find required dependency DXC.")
         exit(1)
 
     print("Found.")
@@ -58,6 +59,7 @@ if __name__ == "__main__":
                 if output.returncode != 0:
                     print("Failed.")
                     print(output.stderr.decode('UTF-8'))
+                    print("Failed. Vertex shader compilation was unsuccessful.")
                     exit(1)
 
             if PIXEL_ENTRYPOINT in f_text:
@@ -66,6 +68,7 @@ if __name__ == "__main__":
                 if output.returncode != 0:
                     print("Failed.")
                     print(output.stderr.decode('UTF-8'))
+                    print("Failed. Pixel shader compilation was unsuccessful.")
                     exit(1)
 
         print("Done.")

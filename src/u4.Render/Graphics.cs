@@ -11,6 +11,8 @@ public static class Graphics
 
     public static SpriteRenderer SpriteRenderer;
 
+    public static Renderer Renderer;
+
     public static void Initialize(GraphicsDevice device)
     {
         Device = device;

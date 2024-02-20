@@ -19,7 +19,7 @@
     <ItemGroup>
       <Content Include="Shaders/**/*.spv">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-          <Link>Content/Shaders/%(RecursiveDir)%(FileName)%(Extension)</Link>
+          <TargetPath>Content/Shaders/%(RecursiveDir)%(FileName)%(Extension)</TargetPath>
       </Content>
     </ItemGroup>
 
