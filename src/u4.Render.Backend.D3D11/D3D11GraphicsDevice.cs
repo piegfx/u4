@@ -23,6 +23,8 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
     
     public ID3D11Device* Device;
     public ID3D11DeviceContext* Context;
+
+    public override GraphicsApi Api => GraphicsApi.Direct3D11;
     
     public D3D11GraphicsDevice(nint hwnd, Size<uint> swapchainSize)
     {
@@ -66,6 +68,11 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
         if (FAILED(Device->CreateRenderTargetView((ID3D11Resource*) swapchainTexture, null, &swapchainTarget)))
             throw new Exception("Failed to create swapchain target.");
         _swapchainTarget = swapchainTarget;
+    }
+
+    public override GraphicsBuffer CreateBuffer<T>(in BufferDescription description, in ReadOnlySpan<T> data)
+    {
+        throw new NotImplementedException();
     }
 
     public override void Present()

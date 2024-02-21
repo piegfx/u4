@@ -2,6 +2,11 @@
 
 public abstract class GraphicsDevice : IDisposable
 {
+    public abstract GraphicsApi Api { get; }
+
+    public abstract GraphicsBuffer CreateBuffer<T>(in BufferDescription description, in ReadOnlySpan<T> data)
+        where T : unmanaged;
+    
     public abstract void Present();
 
     public abstract void Dispose();
