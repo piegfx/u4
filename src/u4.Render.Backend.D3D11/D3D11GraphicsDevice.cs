@@ -2,6 +2,7 @@
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
 using u4.Math;
+using static TerraFX.Interop.DirectX.D3D_DRIVER_TYPE;
 using static TerraFX.Interop.DirectX.D3D_FEATURE_LEVEL;
 using static TerraFX.Interop.DirectX.D3D11_CREATE_DEVICE_FLAG;
 using static TerraFX.Interop.DirectX.DirectX;
@@ -49,8 +50,8 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
         IDXGISwapChain* swapchain;
         ID3D11Device* device;
         ID3D11DeviceContext* context;
-        if (FAILED(D3D11CreateDeviceAndSwapChain(null, D3D_DRIVER_TYPE.D3D_DRIVER_TYPE_HARDWARE, HMODULE.NULL, flags,
-                &level, 1, D3D11_SDK_VERSION, &swapChainDesc, &swapchain, &device, null, &context)))
+        if (FAILED(D3D11CreateDeviceAndSwapChain(null, D3D_DRIVER_TYPE_HARDWARE, HMODULE.NULL, flags, &level, 1,
+                D3D11_SDK_VERSION, &swapChainDesc, &swapchain, &device, null, &context)))
         {
             throw new Exception("Failed to create D3D11 device.");
         }
@@ -72,7 +73,8 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
 
     public override GraphicsBuffer CreateBuffer<T>(in BufferDescription description, in ReadOnlySpan<T> data)
     {
-        throw new NotImplementedException();
+        fixed (void* pData = data)
+            return new D3D11GraphicsBuffer(Device, description, pData);
     }
 
     public override void Present()
@@ -83,7 +85,7 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
     public override void Dispose()
     {
         _swapchainTarget->Release();
-        _swapchainTarget->Release();
+        _swapchainTexture->Release();
         _swapchain->Release();
 
         Context->Release();

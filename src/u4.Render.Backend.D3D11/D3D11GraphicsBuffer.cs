@@ -1,4 +1,5 @@
-﻿using TerraFX.Interop.DirectX;
+﻿using System.Diagnostics.CodeAnalysis;
+using TerraFX.Interop.DirectX;
 using static TerraFX.Interop.DirectX.D3D11_BIND_FLAG;
 using static TerraFX.Interop.DirectX.D3D11_CPU_ACCESS_FLAG;
 using static TerraFX.Interop.DirectX.D3D11_USAGE;
@@ -6,6 +7,7 @@ using static TerraFX.Interop.Windows.Windows;
 
 namespace u4.Render.Backend.D3D11;
 
+[SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
 internal sealed unsafe class D3D11GraphicsBuffer : GraphicsBuffer
 {
     public ID3D11Buffer* Buffer;
@@ -14,6 +16,8 @@ internal sealed unsafe class D3D11GraphicsBuffer : GraphicsBuffer
 
     public D3D11GraphicsBuffer(ID3D11Device* device, in BufferDescription description, void* data)
     {
+        Type = description.Type;
+        
         D3D11_BIND_FLAG bindFlag = description.Type switch
         {
             BufferType.Vertex => D3D11_BIND_VERTEX_BUFFER,
@@ -38,6 +42,8 @@ internal sealed unsafe class D3D11GraphicsBuffer : GraphicsBuffer
         ID3D11Buffer* buffer;
         if (FAILED(device->CreateBuffer(&bufferDesc, data == null ? null : &subData, &buffer)))
             throw new Exception("Failed to create buffer.");
+
+        Buffer = buffer;
     }
 
     public override void Dispose()

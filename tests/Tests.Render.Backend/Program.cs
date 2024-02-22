@@ -26,6 +26,28 @@ unsafe
 
     GraphicsDevice device = new D3D11GraphicsDevice(info.Info.Win.Window, size.As<uint>());
 
+    ReadOnlySpan<float> vertices = stackalloc float[]
+    {
+        -0.5f, -0.5f, 0.0f,
+        -0.5f, +0.5f, 0.0f,
+        +0.5f, +0.5f, 0.0f,
+        +0.5f, -0.5f, 0.0f,
+    };
+
+    ReadOnlySpan<uint> indices = stackalloc uint[]
+    {
+        0, 1, 3,
+        1, 2, 3
+    };
+
+    GraphicsBuffer vertexBuffer =
+        device.CreateBuffer(new BufferDescription(BufferType.Vertex, (uint) vertices.Length * sizeof(float), false),
+            vertices);
+
+    GraphicsBuffer indexBuffer =
+        device.CreateBuffer(new BufferDescription(BufferType.Index, (uint) indices.Length * sizeof(uint), false),
+            indices);
+
     bool shouldClose = false;
     while (!shouldClose)
     {
@@ -47,6 +69,11 @@ unsafe
         
         device.Present();
     }
+    
+    indexBuffer.Dispose();
+    vertexBuffer.Dispose();
+    
+    device.Dispose();
     
     Sdl.DestroyWindow(window);
     Sdl.Quit();
