@@ -45,6 +45,7 @@ if __name__ == "__main__":
 
     VERTEX_ENTRYPOINT = "Vertex"
     PIXEL_ENTRYPOINT = "Pixel"
+    OPT_LEVEL = "-O0"
 
     for file in files:
         print(f"Compiling {file}... ", end="")
@@ -55,7 +56,7 @@ if __name__ == "__main__":
 
             if VERTEX_ENTRYPOINT in f_text:
                 print("Vertex... ", end="")
-                output = run(["dxc", "-spirv", "-T", "vs_6_0", "-E", VERTEX_ENTRYPOINT, "-Fo", f"{file_name}_vert.spv", file], capture_output=True)
+                output = run(["dxc", "-spirv", OPT_LEVEL, "-T", "vs_6_0", "-E", VERTEX_ENTRYPOINT, "-Fo", f"{file_name}_vert.spv", file], capture_output=True)
                 if output.returncode != 0:
                     print("Failed.")
                     print(output.stderr.decode('UTF-8'))
@@ -64,7 +65,7 @@ if __name__ == "__main__":
 
             if PIXEL_ENTRYPOINT in f_text:
                 print("Pixel... ", end="")
-                output = run(["dxc", "-spirv", "-T", "ps_6_0", "-E", PIXEL_ENTRYPOINT, "-Fo", f"{file_name}_frag.spv", file], capture_output=True)
+                output = run(["dxc", "-spirv", OPT_LEVEL, "-T", "ps_6_0", "-E", PIXEL_ENTRYPOINT, "-Fo", f"{file_name}_frag.spv", file], capture_output=True)
                 if output.returncode != 0:
                     print("Failed.")
                     print(output.stderr.decode('UTF-8'))

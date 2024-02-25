@@ -49,7 +49,8 @@ PSOutput Pixel(const in VSOutput input)
 {
     PSOutput output;
 
-    output.Albedo = Albedo.Sample(State, input.TexCoord) * input.Color;
+    //output.Albedo = Albedo.Sample(State, input.TexCoord) * input.Color;
+    output.Albedo = input.Color;
     
     return output;
 }

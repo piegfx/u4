@@ -4,5 +4,5 @@ using u4.Core;
 
 Logger.AttachConsole();
 
-using TestApp test = new SpriteTest();
+using TestApp test = new Basic3DTest();
 test.Run();

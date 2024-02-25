@@ -19,11 +19,17 @@ public class DeferredRenderer : Renderer
     private readonly Pie.Texture _albedoBuffer;
     private readonly Pie.Texture _depthBuffer;
 
-    private Shader _gBufferShader;
-    private InputLayout _gBufferInputLayout;
+    private readonly Shader _gBufferShader;
+    private readonly InputLayout _gBufferInputLayout;
 
     private readonly GraphicsBuffer _cameraBuffer;
     private readonly GraphicsBuffer _drawInfoBuffer;
+
+    // TODO: Customizable versions of some of these.
+    private readonly DepthStencilState _depthStencilState;
+    private readonly RasterizerState _rasterizerState;
+    private readonly BlendState _blendState;
+    private readonly SamplerState _samplerState;
     
     public DeferredRenderer(GraphicsDevice device, Size<int> size) : base(size)
     {
@@ -64,8 +70,13 @@ public class DeferredRenderer : Renderer
             new InputLayoutDescription(Format.R32G32B32A32_Float, 32, 0, InputType.PerVertex) // Color
         });
 
-        _cameraBuffer = device.CreateBuffer(BufferType.UniformBuffer, Unsafe.SizeOf<CameraInfo>(), true);
-        _drawInfoBuffer = device.CreateBuffer(BufferType.UniformBuffer, Unsafe.SizeOf<DrawInfo>(), true);
+        _cameraBuffer = device.CreateBuffer(BufferType.UniformBuffer, (uint) Unsafe.SizeOf<CameraInfo>(), true);
+        _drawInfoBuffer = device.CreateBuffer(BufferType.UniformBuffer, (uint) Unsafe.SizeOf<DrawInfo>(), true);
+
+        _depthStencilState = device.CreateDepthStencilState(DepthStencilStateDescription.LessEqual);
+        _rasterizerState = device.CreateRasterizerState(RasterizerStateDescription.CullNone);
+        _blendState = device.CreateBlendState(BlendStateDescription.Disabled);
+        _samplerState = device.CreateSamplerState(SamplerStateDescription.LinearRepeat);
     }
 
     public override void Clear()
@@ -80,17 +91,48 @@ public class DeferredRenderer : Renderer
 
     public override void Render3D(in CameraInfo camera)
     {
+        _device.UpdateBuffer(_cameraBuffer, 0, camera);
+        
         _device.SetFramebuffer(_gBuffer);
         _device.ClearColorBuffer(0.0f, 0.0f, 0.0f, 0.0f);
         _device.ClearDepthStencilBuffer(ClearFlags.Depth, 0.0f, 1);
         
+        _device.SetPrimitiveType(PrimitiveType.TriangleList);
+        _device.SetShader(_gBufferShader);
         
+        _device.SetDepthStencilState(_depthStencilState);
+        _device.SetRasterizerState(_rasterizerState);
+        _device.SetBlendState(_blendState);
+        
+        _device.SetUniformBuffer(0, _cameraBuffer);
+        _device.SetUniformBuffer(1, _drawInfoBuffer);
+        
+        _device.SetInputLayout(_gBufferInputLayout);
+
+        foreach (TransformedRenderable tRenderable in _opaques)
+        {
+            _device.UpdateBuffer(_drawInfoBuffer, 0, new DrawInfo(tRenderable.World));
+
+            Renderable renderable = tRenderable.Renderable;
+            _device.SetVertexBuffer(0, renderable.VertexBuffer, Vertex.SizeInBytes);
+            _device.SetIndexBuffer(renderable.IndexBuffer, IndexType.UInt);
+            
+            _device.DrawIndexed(renderable.NumElements);
+        }
     }
 
     public override void Dispose()
     {
+        _samplerState.Dispose();
+        _blendState.Dispose();
+        _rasterizerState.Dispose();
+        _depthStencilState.Dispose();
+        
         _drawInfoBuffer.Dispose();
         _cameraBuffer.Dispose();
+        
+        _gBufferInputLayout.Dispose();
+        _gBufferShader.Dispose();
         
         _gBuffer.Dispose();
         _albedoBuffer.Dispose();

@@ -20,4 +20,6 @@ public struct Vertex
 
     public Vertex(Vector3 position, Vector2 texCoord, Vector3 normal) :
         this(position, texCoord, normal, Color.White) { }
+
+    public const uint SizeInBytes = 48;
 }
