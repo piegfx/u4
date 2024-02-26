@@ -49,6 +49,9 @@ public static class App
         Logger.Debug("Initializing input subsystem.");
         Input.Initialize();
         
+        Logger.Debug("Initializing time subsystem.");
+        Time.Initialize();
+        
         Logger.Debug("Initializing user code.");
         Game.Initialize();
 
@@ -57,10 +60,13 @@ public static class App
         _isAlive = true;
         while (_isAlive)
         {
+            if (Time.Update())
+                continue;
+            
             Input.Update();
             Window.ProcessEvents();
             
-            Game.Update(1f / 75f);
+            Game.Update(Time.DeltaTime);
             Game.Draw();
             
             Graphics.Present();
