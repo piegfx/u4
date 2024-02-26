@@ -25,6 +25,8 @@ public static class Time
 
     public static int FPS => _fps;
 
+    public static ulong TotalFrames => _totalFrames;
+
     public static int TargetFPS
     {
         get => _targetFps;
@@ -53,6 +55,7 @@ public static class Time
 
         _timeCount += _deltaTime;
         _frameCount++;
+        _totalFrames++;
 
         if (_timeCount >= 1.0)
         {
