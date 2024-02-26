@@ -7,11 +7,19 @@ namespace u4.Render;
 
 public static class Graphics
 {
+    private static bool _vsync;
+    
     public static GraphicsDevice Device;
 
     public static SpriteRenderer SpriteRenderer;
 
     public static Renderer Renderer;
+
+    public static bool VSync
+    {
+        get => _vsync;
+        set => _vsync = value;
+    }
 
     public static void Initialize(GraphicsDevice device, Size<int> size)
     {
@@ -22,6 +30,8 @@ public static class Graphics
         
         Logger.Trace("Creating main renderer.");
         Renderer = new DeferredRenderer(device, size);
+
+        VSync = true;
     }
 
     public static void Deinitialize()
@@ -37,6 +47,6 @@ public static class Graphics
 
     public static void Present()
     {
-        Device.Present(1);
+        Device.Present(_vsync ? 1 : 0);
     }
 }

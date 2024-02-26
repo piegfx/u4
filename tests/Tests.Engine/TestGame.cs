@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Pie.Windowing;
 using u4.Engine;
 using u4.Math;
@@ -19,6 +20,9 @@ public class TestGame : Game
 
         _texture = new Texture(@"C:\Users\ollie\Pictures\BAGELMIP.png");
         _scale = 1;
+
+        //Graphics.VSync = false;
+        //Time.TargetFPS = 480;
     }
 
     public override void Update(float dt)
