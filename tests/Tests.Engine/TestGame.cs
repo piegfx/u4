@@ -36,10 +36,17 @@ public class TestGame : Game
         if (Input.KeyDown(Key.Down))
             _position.Y += speed * dt;
 
-        if (Input.MouseButtonPressed(MouseButton.Left))
+        if (Input.KeyPressed(Key.RightBracket))
             _scale += 0.1f;
-        if (Input.MouseButtonPressed(MouseButton.Right))
+        if (Input.KeyPressed(Key.LeftBracket))
             _scale -= 0.1f;
+
+        if (Input.MouseButtonDown(MouseButton.Left))
+            _position = Input.MousePosition;
+        if (Input.MouseButtonDown(MouseButton.Right))
+            _position += Input.MouseDelta;
+
+        _scale += Input.ScrollDelta.Y * 0.1f;
     }
 
     public override void Draw()
