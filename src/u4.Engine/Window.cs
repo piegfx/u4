@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Numerics;
 using Pie.Windowing;
 using Pie.Windowing.Events;
 using u4.Math;
@@ -13,6 +15,24 @@ public static class Window
     internal static Pie.Windowing.Window PieWindow;
 
     public static event OnCloseRequested CloseRequested = delegate { };
+
+    public static event OnResized Resized = delegate { };
+
+    public static event OnKeyDown KeyDown = delegate { };
+
+    public static event OnKeyUp KeyUp = delegate { };
+
+    public static event OnKeyRepeat KeyRepeat = delegate { };
+
+    public static event OnMouseButtonDown MouseButtonDown = delegate { };
+
+    public static event OnMouseButtonUp MouseButtonUp = delegate { };
+
+    public static event OnMouseMove MouseMove = delegate { };
+
+    public static event OnScrollWheel ScrollWheel = delegate { };
+
+    public static event OnTextInput TextInput = delegate { };
 
     internal static string EngineTitle
     {
@@ -107,9 +127,82 @@ public static class Window
                 case QuitEvent:
                     CloseRequested.Invoke();
                     break;
+                
+                case ResizeEvent resize:
+                    Resized.Invoke(new Size<int>(resize.Width, resize.Height));
+                    break;
+                
+                case KeyEvent key:
+                    switch (key.EventType)
+                    {
+                        case WindowEventType.KeyDown:
+                            KeyDown.Invoke(key.Key);
+                            break;
+                        
+                        case WindowEventType.KeyUp:
+                            KeyUp.Invoke(key.Key);
+                            break;
+                        
+                        case WindowEventType.KeyRepeat:
+                            KeyRepeat.Invoke(key.Key);
+                            break;
+                        
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(key.EventType));
+                    }
+
+                    break;
+                
+                case MouseButtonEvent button:
+                    switch (button.EventType)
+                    {
+                        case WindowEventType.MouseButtonDown:
+                            MouseButtonDown.Invoke(button.Button);
+                            break;
+                        
+                        case WindowEventType.MouseButtonUp:
+                            MouseButtonUp.Invoke(button.Button);
+                            break;
+                        
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(button.EventType));
+                    }
+
+                    break;
+                
+                case MouseMoveEvent move:
+                    MouseMove.Invoke(new Vector2(move.MouseX, move.MouseY), new Vector2(move.DeltaX, move.DeltaY));
+                    break;
+                
+                case MouseScrollEvent scroll:
+                    ScrollWheel.Invoke(new Vector2(scroll.X, scroll.Y));
+                    break;
+                
+                case TextInputEvent textInput:
+                    foreach (char c in textInput.Text)
+                        TextInput.Invoke(c);
+                    break;
             }
         }
     }
 
     public delegate void OnCloseRequested();
+
+    public delegate void OnResized(Size<int> newSize);
+
+    public delegate void OnKeyDown(Key key);
+
+    public delegate void OnKeyUp(Key key);
+
+    public delegate void OnKeyRepeat(Key key);
+
+    public delegate void OnMouseButtonDown(MouseButton button);
+
+    public delegate void OnMouseButtonUp(MouseButton button);
+
+    public delegate void OnMouseMove(Vector2 position, Vector2 delta);
+
+    public delegate void OnScrollWheel(Vector2 delta);
+
+    public delegate void OnTextInput(char c);
 }
