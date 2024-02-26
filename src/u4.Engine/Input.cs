@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Pie.Windowing;
 
 namespace u4.Engine;
@@ -10,6 +11,22 @@ public static class Input
 
     private static HashSet<MouseButton> _buttonsDown;
     private static HashSet<MouseButton> _newButtonsDown;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool KeyDown(Key key)
+        => _keysDown.Contains(key);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool KeyPressed(Key key)
+        => _newKeysDown.Contains(key);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool MouseButtonDown(MouseButton button)
+        => _buttonsDown.Contains(button);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool MouseButtonPressed(MouseButton button)
+        => _newButtonsDown.Contains(button);
     
     internal static void Initialize()
     {

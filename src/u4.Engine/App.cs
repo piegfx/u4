@@ -46,16 +46,21 @@ public static class App
         
         Window.EngineTitle = $" - {device.Api}";
         
+        Logger.Debug("Initializing input subsystem.");
+        Input.Initialize();
+        
         Logger.Debug("Initializing user code.");
         Game.Initialize();
 
+        Logger.Debug("Entering main loop.");
+        
         _isAlive = true;
-
         while (_isAlive)
         {
+            Input.Update();
             Window.ProcessEvents();
             
-            Game.Update(1.0f);
+            Game.Update(1f / 75f);
             Game.Draw();
             
             Graphics.Present();

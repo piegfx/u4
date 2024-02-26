@@ -33,6 +33,10 @@ public struct Size<T> : IEquatable<Size<T>> where T : INumber<T>
         => new System.Drawing.Size(int.CreateChecked(size.Width), int.CreateChecked(size.Height));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator Vector2(in Size<T> size)
+        => new Vector2(float.CreateChecked(size.Width), float.CreateChecked(size.Height));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator Size<T>(in System.Drawing.Size size)
         => new Size<T>(T.CreateChecked(size.Width), T.CreateChecked(size.Height));
 
@@ -43,8 +47,7 @@ public struct Size<T> : IEquatable<Size<T>> where T : INumber<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Size<T> operator -(in Size<T> left, in Size<T> right)
         => new Size<T>(left.Width - right.Width, left.Height - right.Height);
-
-
+    
     public static bool operator ==(Size<T> left, Size<T> right)
     {
         return left.Equals(right);
