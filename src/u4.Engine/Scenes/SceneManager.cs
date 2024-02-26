@@ -9,6 +9,11 @@ public static class SceneManager
     
     internal static Scene ActiveScene;
 
+    public static void SetScene(Scene scene)
+    {
+        _sceneToSwitch = scene;
+    }
+
     internal static void Initialize()
     {
         ActiveScene.Initialize();

@@ -5,4 +5,4 @@ Logger.AttachConsole();
 
 LaunchOptions options = LaunchOptions.Default;
 
-App.Run(options, new Game());
+//App.Run(options, new Game());

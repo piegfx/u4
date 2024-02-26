@@ -1,6 +1,7 @@
 ﻿using Pie;
 using Pie.Windowing;
 using u4.Core;
+using u4.Engine.Scenes;
 using u4.Render;
 
 namespace u4.Engine;
@@ -15,7 +16,7 @@ public static class App
 
     public static Game Game;
     
-    public static void Run(LaunchOptions options, Game game)
+    public static void Run(LaunchOptions options, Game game, Scene scene)
     {
         Name = options.AppName;
         Version = options.Version;
@@ -52,7 +53,10 @@ public static class App
         Logger.Debug("Initializing time subsystem.");
         Time.Initialize();
         
-        Logger.Debug("Initializing user code.");
+        Logger.Debug("Initializing game.");
+        SceneManager.ActiveScene = scene;
+        // Remove gc reference.
+        scene = null;
         Game.Initialize();
 
         Logger.Debug("Entering main loop.");
