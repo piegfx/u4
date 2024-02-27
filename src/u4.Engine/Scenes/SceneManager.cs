@@ -9,6 +9,8 @@ public static class SceneManager
     
     internal static Scene ActiveScene;
 
+    public static Scene CurrentScene => ActiveScene;
+
     public static void SetScene(Scene scene)
     {
         _sceneToSwitch = scene;

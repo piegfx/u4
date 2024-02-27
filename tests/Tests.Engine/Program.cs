@@ -6,4 +6,4 @@ using u4.Engine;
 Logger.AttachConsole();
 
 LaunchOptions options = LaunchOptions.Default;
-App.Run(options, new TestGame(), new TestBasicEntity());
+App.Run(options, new TestGame(), new TestSceneEntity());

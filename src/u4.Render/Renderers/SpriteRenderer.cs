@@ -120,6 +120,9 @@ public sealed class SpriteRenderer : IDisposable
     public void Draw(Texture texture, Vector2 topLeft, Vector2 topRight, Vector2 bottomLeft, Vector2 bottomRight,
         Color tint)
     {
+        if (!_isBegun)
+            throw new Exception("Cannot draw, sprite renderer has not begun.");
+        
         if (_texture != texture || _currentSprite >= MaxSprites)
             Flush();
 
