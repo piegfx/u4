@@ -109,10 +109,10 @@ public sealed class SpriteRenderer : IDisposable
 
         Matrix4x4 transform = Matrix4x4.CreateRotationZ(rotation);
 
-        Vector2 topLeft = Vector2.Transform(-origin * scale + position, transform);
-        Vector2 topRight = Vector2.Transform(-origin * scale + position + new Vector2(size.Width, 0) * scale, transform);
-        Vector2 bottomLeft = Vector2.Transform(-origin * scale + position + new Vector2(0, size.Height) * scale, transform);
-        Vector2 bottomRight = Vector2.Transform(-origin * scale + position + new Vector2(size.Width, size.Height) * scale, transform);
+        Vector2 topLeft = position + Vector2.Transform(-origin * scale, transform);
+        Vector2 topRight = position + Vector2.Transform(-origin * scale + new Vector2(size.Width, 0) * scale, transform);
+        Vector2 bottomLeft = position + Vector2.Transform(-origin * scale + new Vector2(0, size.Height) * scale, transform);
+        Vector2 bottomRight = position + Vector2.Transform(-origin * scale + new Vector2(size.Width, size.Height) * scale, transform);
         
         Draw(texture, topLeft, topRight, bottomLeft, bottomRight, tint);
     }
