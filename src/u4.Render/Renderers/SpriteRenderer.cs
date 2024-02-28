@@ -88,7 +88,7 @@ public sealed class SpriteRenderer : IDisposable
             viewport.Y + viewport.Height, viewport.Y, -1, 1);
         Matrix4x4 trans = transform ?? Matrix4x4.Identity;
         
-        _device.UpdateBuffer(_transformBuffer, 0, proj * trans);
+        _device.UpdateBuffer(_transformBuffer, 0, trans * proj);
     }
 
     public void End()
