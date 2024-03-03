@@ -1,5 +1,5 @@
 ﻿#!/usr/bin/python3
-# AG Games Auto-HLSL-To-Spirv Shader Compiler 1.0
+# Aquagoose Games Auto-HLSL-To-Spirv Shader Compiler 1.0
 # Works in the current working directory, so make sure the current directory is the one with the shaders you wish to
 # compile.
 # While it will recurse all available subdirectories as well, this can take a lot of time if there are a lot of files.
@@ -22,7 +22,7 @@ def recurse_files(path: str, files: list[str]):
 
 
 if __name__ == "__main__":
-    print("AG Games Shader Compiler\n(c) AG Games 2024")
+    print("Aquagoose Games Shader Compiler\n(c) Aquagoose Games 2024")
 
     print("Checking for DXC... ", end="")
     if which("dxc") is None:

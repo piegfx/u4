@@ -20,7 +20,9 @@ public abstract class Renderer : IDisposable
     
     public abstract void Draw(Renderable renderable, Matrix4x4 world);
 
-    public abstract void Render3D(in CameraInfo camera);
+    public abstract void Perform3DPass(in CameraInfo camera);
+
+    public abstract void Render();
     
     public abstract void Dispose();
 }

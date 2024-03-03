@@ -22,6 +22,10 @@ public class DeferredRenderer : Renderer
     private readonly Shader _gBufferShader;
     private readonly InputLayout _gBufferInputLayout;
 
+    private readonly Framebuffer _postProcessBuffer;
+    private readonly Pie.Texture _
+    private readonly Shader _postProcessShader;
+
     private readonly GraphicsBuffer _cameraBuffer;
     private readonly GraphicsBuffer _drawInfoBuffer;
 
@@ -70,6 +74,15 @@ public class DeferredRenderer : Renderer
             new InputLayoutDescription(Format.R32G32B32A32_Float, 32, 0, InputType.PerVertex) // Color
         });
 
+        vertSpv = File.ReadAllBytes("Content/Shaders/Deferred/PostProcess_vert.spv");
+        fragSpv = File.ReadAllBytes("Content/Shaders/Deferred/PostProcess_frag.spv");
+
+        _postProcessShader = device.CreateShader(new[]
+        {
+            new ShaderAttachment(ShaderStage.Vertex, vertSpv, "Vertex"),
+            new ShaderAttachment(ShaderStage.Fragment, fragSpv, "Pixel")
+        });
+
         _cameraBuffer = device.CreateBuffer(BufferType.UniformBuffer, (uint) Unsafe.SizeOf<CameraInfo>(), true);
         _drawInfoBuffer = device.CreateBuffer(BufferType.UniformBuffer, (uint) Unsafe.SizeOf<DrawInfo>(), true);
 
@@ -89,7 +102,7 @@ public class DeferredRenderer : Renderer
         _opaques.Add(new TransformedRenderable(renderable, world));
     }
 
-    public override void Render3D(in CameraInfo camera)
+    public override void Perform3DPass(in CameraInfo camera)
     {
         _device.UpdateBuffer(_cameraBuffer, 0, camera);
         
@@ -119,6 +132,11 @@ public class DeferredRenderer : Renderer
             
             _device.DrawIndexed(renderable.NumElements);
         }
+    }
+
+    public override void Render()
+    {
+        
     }
 
     public override void Dispose()

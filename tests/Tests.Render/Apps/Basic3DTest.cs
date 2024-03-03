@@ -47,6 +47,8 @@ public class Basic3DTest : TestApp
 
         Matrix4x4 view = Matrix4x4.CreateLookAt(new Vector3(0, 0, 3), Vector3.Zero, Vector3.UnitY);
         
-        renderer.Render3D(new CameraInfo(projection, view));
+        renderer.Perform3DPass(new CameraInfo(projection, view));
+        
+        renderer.Render();
     }
 }
