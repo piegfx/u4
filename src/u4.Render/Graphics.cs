@@ -1,4 +1,6 @@
-﻿using Pie;
+﻿using System;
+using System.Collections.Concurrent;
+using Pie;
 using u4.Core;
 using u4.Math;
 using u4.Render.Renderers;
@@ -8,6 +10,7 @@ namespace u4.Render;
 public static class Graphics
 {
     private static bool _vsync;
+    private static ConcurrentBag<Action> _actions;
     
     public static GraphicsDevice Device;
 
@@ -24,6 +27,8 @@ public static class Graphics
     public static void Initialize(GraphicsDevice device, Size<int> size)
     {
         Device = device;
+
+        _actions = new ConcurrentBag<Action>();
 
         Logger.Trace("Creating sprite renderer.");
         SpriteRenderer = new SpriteRenderer(device);
@@ -48,5 +53,15 @@ public static class Graphics
     public static void Present()
     {
         Device.Present(_vsync ? 1 : 0);
+        
+        foreach (Action action in _actions)
+            action.Invoke();
+        
+        _actions.Clear();
+    }
+
+    public static void RunOnGraphicsThread(Action action)
+    {
+        _actions.Add(action);
     }
 }

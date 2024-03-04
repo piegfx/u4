@@ -29,7 +29,7 @@ public class Basic3DTest : TestApp
             1, 2, 3
         };
 
-        _renderable = new Renderable(vertices, indices);
+        _renderable = new Renderable(vertices, indices, new Material(new Texture(@"C:\Users\ollie\Pictures\BAGELMIP.png")));
     }
 
     protected override void Update(float dt)
@@ -52,7 +52,7 @@ public class Basic3DTest : TestApp
         renderer.Draw(_renderable, Matrix4x4.CreateFromYawPitchRoll(_value, _value, _value));
 
         System.Drawing.Size winSize = Window.FramebufferSize;
-        Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(70 * (float.Pi / 180),
+        Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(45 * (float.Pi / 180),
             winSize.Width / (float) winSize.Height, 0.1f, 100f);
 
         Matrix4x4 view = Matrix4x4.CreateLookAt(new Vector3(0, 0, 3), Vector3.Zero, Vector3.UnitY);

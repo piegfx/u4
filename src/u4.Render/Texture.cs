@@ -36,7 +36,7 @@ public class Texture : IDisposable
 
     ~Texture()
     {
-        Dispose();
+        Graphics.RunOnGraphicsThread(Dispose);
     }
 
     public virtual void Dispose()
@@ -44,4 +44,12 @@ public class Texture : IDisposable
         GC.SuppressFinalize(this);
         PieTexture.Dispose();
     }
+
+    public static readonly Texture White = new Texture([255, 255, 255, 255], new Size<int>(1));
+
+    public static readonly Texture Black = new Texture([0, 0, 0, 255], new Size<int>(1));
+
+    public static readonly Texture EmptyNormal = new Texture([128, 128, 255, 255], new Size<int>(1));
+
+    public static readonly Texture Transparent = new Texture([0, 0, 0, 0], new Size<int>(1));
 }

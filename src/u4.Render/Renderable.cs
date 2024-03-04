@@ -9,15 +9,18 @@ public class Renderable : IDisposable
     public readonly GraphicsBuffer IndexBuffer;
 
     public readonly uint NumElements;
+
+    public Material Material;
     
-    public Renderable(GraphicsBuffer vertexBuffer, GraphicsBuffer indexBuffer, uint numElements)
+    public Renderable(GraphicsBuffer vertexBuffer, GraphicsBuffer indexBuffer, uint numElements, Material material)
     {
         VertexBuffer = vertexBuffer;
         IndexBuffer = indexBuffer;
         NumElements = numElements;
+        Material = material;
     }
 
-    public Renderable(Vertex[] vertices, uint[] indices, bool dynamic = false)
+    public Renderable(Vertex[] vertices, uint[] indices, Material material, bool dynamic = false)
     {
         GraphicsDevice device = Graphics.Device;
 
@@ -25,6 +28,8 @@ public class Renderable : IDisposable
         IndexBuffer = device.CreateBuffer(BufferType.IndexBuffer, indices, dynamic);
 
         NumElements = (uint) indices.Length;
+
+        Material = material;
     }
     
     public void Dispose()

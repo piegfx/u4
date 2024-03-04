@@ -138,6 +138,9 @@ public class DeferredRenderer : Renderer
         {
             _device.UpdateBuffer(_drawInfoBuffer, 0, new DrawInfo(tRenderable.World));
 
+            Material material = tRenderable.Renderable.Material;
+            _device.SetTexture(2, material.Albedo.PieTexture, _samplerState);
+
             Renderable renderable = tRenderable.Renderable;
             _device.SetVertexBuffer(0, renderable.VertexBuffer, Vertex.SizeInBytes);
             _device.SetIndexBuffer(renderable.IndexBuffer, IndexType.UInt);
