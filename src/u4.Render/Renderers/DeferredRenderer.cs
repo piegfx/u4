@@ -23,7 +23,7 @@ public class DeferredRenderer : Renderer
     private readonly InputLayout _gBufferInputLayout;
 
     private readonly Framebuffer _postProcessBuffer;
-    private readonly Pie.Texture _
+    private readonly Texture _postProcessBufferTexture;
     private readonly Shader _postProcessShader;
 
     private readonly GraphicsBuffer _cameraBuffer;
@@ -76,6 +76,18 @@ public class DeferredRenderer : Renderer
 
         vertSpv = File.ReadAllBytes("Content/Shaders/Deferred/PostProcess_vert.spv");
         fragSpv = File.ReadAllBytes("Content/Shaders/Deferred/PostProcess_frag.spv");
+
+        gBufferDesc.Format = Format.R8G8B8A8_UNorm;
+        gBufferDesc.Usage = TextureUsage.Framebuffer | TextureUsage.ShaderResource;
+        // The post process texture is a u4.Render.Texture, as we need to render it to a sprite renderer later.
+        // As it's a class, it's heap allocated, so creating a new instance every frame is a bad idea, so best just to
+        // store it.
+        _postProcessBufferTexture = new Texture(device.CreateTexture(gBufferDesc), size);
+
+        _postProcessBuffer = device.CreateFramebuffer(new[]
+        {
+            new FramebufferAttachment(_postProcessBufferTexture.PieTexture)
+        });
 
         _postProcessShader = device.CreateShader(new[]
         {
@@ -136,7 +148,20 @@ public class DeferredRenderer : Renderer
 
     public override void Render()
     {
+        _device.SetFramebuffer(_postProcessBuffer);
+        _device.ClearColorBuffer(ClearColor);
         
+        _device.SetShader(_postProcessShader);
+        
+        _device.SetTexture(0, _albedoBuffer, _samplerState);
+        
+        _device.Draw(6);
+        
+        _device.SetFramebuffer(null);
+        
+        Graphics.SpriteRenderer.Begin();
+        Graphics.SpriteRenderer.Draw(_postProcessBufferTexture, Vector2.Zero);
+        Graphics.SpriteRenderer.End();
     }
 
     public override void Dispose()

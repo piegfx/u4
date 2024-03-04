@@ -17,7 +17,7 @@ struct PSOutput
     float4 Color: SV_Target0;
 };
 
-cbuffer SpriteMatrdfgdfgices : register(b0)
+cbuffer SpriteMatrices : register(b0)
 {
     float4x4 ProjView;
 }

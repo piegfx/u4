@@ -28,9 +28,10 @@ public class Texture : IDisposable
         device.GenerateMipmaps(PieTexture);
     }
 
-    public Texture(Pie.Texture pieTexture)
+    public Texture(Pie.Texture pieTexture, Size<int> size)
     {
         PieTexture = pieTexture;
+        Size = size;
     }
 
     ~Texture()

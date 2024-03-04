@@ -9,6 +9,7 @@ namespace Tests.Render.Apps;
 public class Basic3DTest : TestApp
 {
     private Renderable _renderable;
+    private float _value;
     
     protected override void Initialize()
     {
@@ -16,10 +17,10 @@ public class Basic3DTest : TestApp
 
         Vertex[] vertices = new[]
         {
-            new Vertex(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 0), Vector3.Zero),
-            new Vertex(new Vector3(-0.5f, +0.5f, 0), new Vector2(0, 1), Vector3.Zero),
-            new Vertex(new Vector3(+0.5f, +0.5f, 0), new Vector2(1, 1), Vector3.Zero),
-            new Vertex(new Vector3(+0.5f, -0.5f, 0), new Vector2(1, 0), Vector3.Zero)
+            new Vertex(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 0), Vector3.Zero, Color.Red),
+            new Vertex(new Vector3(-0.5f, +0.5f, 0), new Vector2(0, 1), Vector3.Zero, Color.Green),
+            new Vertex(new Vector3(+0.5f, +0.5f, 0), new Vector2(1, 1), Vector3.Zero, Color.Blue),
+            new Vertex(new Vector3(+0.5f, -0.5f, 0), new Vector2(1, 0), Vector3.Zero, Color.Yellow)
         };
 
         uint[] indices = new uint[]
@@ -31,15 +32,24 @@ public class Basic3DTest : TestApp
         _renderable = new Renderable(vertices, indices);
     }
 
+    protected override void Update(float dt)
+    {
+        base.Update(dt);
+
+        _value += dt;
+    }
+
     protected override void Draw()
     {
         base.Draw();
+        
+        Graphics.Device.ClearColorBuffer(Color.Black);
 
         Renderer renderer = Graphics.Renderer;
         renderer.ClearColor = Color.CornflowerBlue;
         
         renderer.Clear();
-        renderer.Draw(_renderable, Matrix4x4.Identity);
+        renderer.Draw(_renderable, Matrix4x4.CreateFromYawPitchRoll(_value, _value, _value));
 
         System.Drawing.Size winSize = Window.FramebufferSize;
         Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(70 * (float.Pi / 180),
