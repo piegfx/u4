@@ -1,30 +1,28 @@
 ﻿using System;
-using Pie.SDL;
+using Silk.NET.SDL;
 using u4.Math;
 using u4.Render.Backend;
 using u4.Render.Backend.D3D11;
 
 unsafe
 {
-    if (Sdl.Init(Sdl.InitVideo | Sdl.InitEvents) < 0)
+    Sdl sdl = Sdl.GetApi();
+    
+    if (sdl.Init(Sdl.InitVideo | Sdl.InitEvents) < 0)
         throw new Exception("Failed to initialize SDL.");
 
     Size<int> size = new Size<int>(1280, 720);
-    
-    void* window;
-    fixed (byte* title = "Test"u8)
-    {
-        window = Sdl.CreateWindow((sbyte*) title, (int) Sdl.WindowposCentered, (int) Sdl.WindowposCentered, size.Width,
-            size.Height, (uint) SdlWindowFlags.Shown);
-    }
+
+    Window* window = sdl.CreateWindow("Test", Sdl.WindowposCentered, Sdl.WindowposCentered, size.Width, size.Height,
+        (uint) WindowFlags.Shown);
 
     if (window == null)
         throw new Exception("Failed to create window.");
 
-    SdlSysWmInfo info = new SdlSysWmInfo();
-    Sdl.GetWindowWMInfo(window, &info);
+    SysWMInfo info = new SysWMInfo();
+    sdl.GetWindowWMInfo(window, &info);
 
-    GraphicsDevice device = new D3D11GraphicsDevice(info.Info.Win.Window, size.As<uint>());
+    GraphicsDevice device = new D3D11GraphicsDevice(info.Info.Win.Hwnd, size.As<uint>());
 
     ReadOnlySpan<float> vertices = stackalloc float[]
     {
@@ -48,18 +46,24 @@ unsafe
         device.CreateBuffer(new BufferDescription(BufferType.Index, (uint) indices.Length * sizeof(uint), false),
             indices);
 
+    ShaderModule vertexShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Vertex, "Vertex");
+    ShaderModule pixelShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Pixel, "Pixel");
+    
+    pixelShader.Dispose();
+    vertexShader.Dispose();
+
     bool shouldClose = false;
     while (!shouldClose)
     {
-        SdlEvent sEvent;
-        while (Sdl.PollEvent(&sEvent))
+        Event sEvent;
+        while (sdl.PollEvent(&sEvent) != 0)
         {
-            switch ((SdlEventType) sEvent.Type)
+            switch ((EventType) sEvent.Type)
             {
-                case SdlEventType.WindowEvent:
-                    switch ((SdlWindowEventId) sEvent.Window.Event)
+                case EventType.Windowevent:
+                    switch ((WindowEventID) sEvent.Window.Event)
                     {
-                        case SdlWindowEventId.Close:
+                        case WindowEventID.Close:
                             shouldClose = true;
                             break;
                     }
@@ -75,6 +79,6 @@ unsafe
     
     device.Dispose();
     
-    Sdl.DestroyWindow(window);
-    Sdl.Quit();
+    sdl.DestroyWindow(window);
+    sdl.Quit();
 }

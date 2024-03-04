@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
 using u4.Math;
@@ -75,6 +76,11 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
     {
         fixed (void* pData = data)
             return new D3D11GraphicsBuffer(Device, description, pData);
+    }
+
+    public override ShaderModule CreateShaderModuleFromFile(string path, ShaderStage stage, string entryPoint)
+    {
+        return D3D11ShaderModule.FromFile(path, stage, Encoding.UTF8.GetBytes(entryPoint));
     }
 
     public override void Present()

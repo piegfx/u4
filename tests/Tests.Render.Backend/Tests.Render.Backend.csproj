@@ -14,7 +14,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Pie.SDL" Version="0.10.1" />
+      <PackageReference Include="Silk.NET.SDL" Version="2.20.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Shaders/**/*">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
