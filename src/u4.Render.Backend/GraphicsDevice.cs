@@ -1,8 +1,12 @@
-﻿namespace u4.Render.Backend;
+﻿using u4.Math;
+
+namespace u4.Render.Backend;
 
 public abstract class GraphicsDevice : IDisposable
 {
     public abstract GraphicsApi Api { get; }
+
+    public abstract void ClearColorBuffer(Color color);
 
     public abstract GraphicsBuffer CreateBuffer<T>(in BufferDescription description, in ReadOnlySpan<T> data)
         where T : unmanaged;

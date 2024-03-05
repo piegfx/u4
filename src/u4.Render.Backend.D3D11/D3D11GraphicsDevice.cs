@@ -72,6 +72,11 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
         _swapchainTarget = swapchainTarget;
     }
 
+    public override void ClearColorBuffer(Color color)
+    {
+        Context->ClearRenderTargetView(_swapchainTarget, &color.R);
+    }
+
     public override GraphicsBuffer CreateBuffer<T>(in BufferDescription description, in ReadOnlySpan<T> data)
     {
         fixed (void* pData = data)

@@ -3,6 +3,7 @@ using Silk.NET.SDL;
 using u4.Math;
 using u4.Render.Backend;
 using u4.Render.Backend.D3D11;
+using Color = u4.Math.Color;
 
 unsafe
 {
@@ -71,6 +72,8 @@ unsafe
             }
         }
         
+        device.ClearColorBuffer(Color.CornflowerBlue);
+        
         device.Present();
     }
     
@@ -81,4 +84,6 @@ unsafe
     
     sdl.DestroyWindow(window);
     sdl.Quit();
+    
+    sdl.Dispose();
 }
