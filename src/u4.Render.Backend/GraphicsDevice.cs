@@ -12,6 +12,8 @@ public abstract class GraphicsDevice : IDisposable
         where T : unmanaged;
 
     public abstract ShaderModule CreateShaderModuleFromFile(string path, ShaderStage stage, string entryPoint);
+
+    public abstract Shader CreateShader(in ReadOnlySpan<ShaderAttachment> attachments);
     
     public abstract void Present();
 

@@ -88,6 +88,11 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
         return D3D11ShaderModule.FromFile(path, stage, Encoding.UTF8.GetBytes(entryPoint));
     }
 
+    public override Shader CreateShader(in ReadOnlySpan<ShaderAttachment> attachments)
+    {
+        return new D3D11Shader(Device, attachments);
+    }
+
     public override void Present()
     {
         _swapchain->Present(1, 0);

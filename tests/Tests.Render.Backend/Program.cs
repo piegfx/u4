@@ -30,7 +30,7 @@ unsafe
         -0.5f, -0.5f, 0.0f,
         -0.5f, +0.5f, 0.0f,
         +0.5f, +0.5f, 0.0f,
-        +0.5f, -0.5f, 0.0f,
+        +0.5f, -0.5f, 0.0f
     };
 
     ReadOnlySpan<uint> indices = stackalloc uint[]
@@ -49,6 +49,14 @@ unsafe
 
     ShaderModule vertexShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Vertex, "Vertex");
     ShaderModule pixelShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Pixel, "Pixel");
+
+    ShaderAttachment[] attachments = new[]
+    {
+        new ShaderAttachment(vertexShader, ShaderStage.Vertex),
+        new ShaderAttachment(pixelShader, ShaderStage.Pixel)
+    };
+
+    Shader shader = device.CreateShader(attachments);
     
     pixelShader.Dispose();
     vertexShader.Dispose();
@@ -76,6 +84,8 @@ unsafe
         
         device.Present();
     }
+    
+    shader.Dispose();
     
     indexBuffer.Dispose();
     vertexBuffer.Dispose();
