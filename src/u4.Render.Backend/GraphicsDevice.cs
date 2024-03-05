@@ -14,6 +14,14 @@ public abstract class GraphicsDevice : IDisposable
     public abstract ShaderModule CreateShaderModuleFromFile(string path, ShaderStage stage, string entryPoint);
 
     public abstract Shader CreateShader(in ReadOnlySpan<ShaderAttachment> attachments);
+
+    public abstract void SetPrimitiveType(PrimitiveType type);
+    
+    public abstract void SetShader(Shader shader);
+
+    public abstract void Draw(uint vertexCount);
+    
+    public abstract void DrawIndexed(uint indexCount);
     
     public abstract void Present();
 

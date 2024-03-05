@@ -82,6 +82,11 @@ unsafe
         
         device.ClearColorBuffer(Color.CornflowerBlue);
         
+        device.SetShader(shader);
+        device.SetPrimitiveType(PrimitiveType.TriangleList);
+        
+        device.Draw(6);
+        
         device.Present();
     }
     

@@ -70,6 +70,9 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
         if (FAILED(Device->CreateRenderTargetView((ID3D11Resource*) swapchainTexture, null, &swapchainTarget)))
             throw new Exception("Failed to create swapchain target.");
         _swapchainTarget = swapchainTarget;
+
+        D3D11_VIEWPORT viewport = new D3D11_VIEWPORT(0, 0, swapchainSize.Width, swapchainSize.Height);
+        Context->RSSetViewports(1, &viewport);
     }
 
     public override void ClearColorBuffer(Color color)
@@ -93,9 +96,49 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
         return new D3D11Shader(Device, attachments);
     }
 
+    public override void SetPrimitiveType(PrimitiveType type)
+    {
+        Context->IASetPrimitiveTopology(type.ToPrimitiveTopology());
+    }
+
+    public override void SetShader(Shader shader)
+    {
+        D3D11Shader d3dShader = (D3D11Shader) shader;
+
+        for (int i = 0; i < d3dShader.Objects.Length; i++)
+        {
+            ref D3D11Shader.ShaderObject obj = ref d3dShader.Objects[i];
+
+            switch (obj.Stage)
+            {
+                case ShaderStage.Vertex:
+                    Context->VSSetShader((ID3D11VertexShader*) obj.Shader, null, 0);
+                    break;
+                case ShaderStage.Pixel:
+                    Context->PSSetShader((ID3D11PixelShader*) obj.Shader, null, 0);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
+    public override void Draw(uint vertexCount)
+    {
+        Context->Draw(vertexCount, 0);
+    }
+
+    public override void DrawIndexed(uint indexCount)
+    {
+        Context->DrawIndexed(indexCount, 0, 0);
+    }
+
     public override void Present()
     {
         _swapchain->Present(1, 0);
+
+        ID3D11RenderTargetView* target = _swapchainTarget;
+        Context->OMSetRenderTargets(1, &target, null);
     }
 
     public override void Dispose()
