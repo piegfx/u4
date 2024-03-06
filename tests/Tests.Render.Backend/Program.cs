@@ -15,7 +15,7 @@ unsafe
     Size<int> size = new Size<int>(1280, 720);
 
     Window* window = sdl.CreateWindow("Test", Sdl.WindowposCentered, Sdl.WindowposCentered, size.Width, size.Height,
-        (uint) WindowFlags.Shown);
+        (uint) (WindowFlags.Shown | WindowFlags.Resizable));
 
     if (window == null)
         throw new Exception("Failed to create window.");
@@ -74,6 +74,12 @@ unsafe
                     {
                         case WindowEventID.Close:
                             shouldClose = true;
+                            break;
+                        
+                        case WindowEventID.Resized:
+                            device.ResizeSwapchain(new Size<int>(sEvent.Window.Data1, sEvent.Window.Data2));
+                            device.Viewport = new Viewport(0, 0, (uint) sEvent.Window.Data1,
+                                (uint) sEvent.Window.Data2);
                             break;
                     }
                     break;

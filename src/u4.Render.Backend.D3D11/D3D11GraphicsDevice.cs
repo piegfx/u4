@@ -17,8 +17,13 @@ using static TerraFX.Interop.Windows.Windows;
 namespace u4.Render.Backend.D3D11;
 
 [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
-public unsafe class D3D11GraphicsDevice : GraphicsDevice
+public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
 {
+    private const uint SwapchainFlags =
+        (uint) (DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING | DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
+
+    private Viewport _viewport;
+    
     private IDXGISwapChain* _swapchain;
     private ID3D11Texture2D* _swapchainTexture;
     private ID3D11RenderTargetView* _swapchainTarget;
@@ -27,7 +32,27 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
     public ID3D11DeviceContext* Context;
 
     public override GraphicsApi Api => GraphicsApi.Direct3D11;
-    
+
+    public override Viewport Viewport
+    {
+        get => _viewport;
+        set
+        {
+            _viewport = value;
+            D3D11_VIEWPORT viewport = new D3D11_VIEWPORT()
+            {
+                TopLeftX = value.X,
+                TopLeftY = value.Y,
+                Width = value.Width,
+                Height = value.Height,
+                MinDepth = value.MinDepth,
+                MaxDepth = value.MaxDepth
+            };
+
+            Context->RSSetViewports(1, &viewport);
+        }
+    }
+
     public D3D11GraphicsDevice(nint hwnd, Size<uint> swapchainSize)
     {
         DXGI_SWAP_CHAIN_DESC swapChainDesc = new()
@@ -42,7 +67,7 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
             SampleDesc = new DXGI_SAMPLE_DESC(1, 0),
             SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD,
 
-            Flags = (uint) (DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING | DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH)
+            Flags = SwapchainFlags
         };
 
         uint flags = (uint) (D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG);
@@ -71,8 +96,7 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
             throw new Exception("Failed to create swapchain target.");
         _swapchainTarget = swapchainTarget;
 
-        D3D11_VIEWPORT viewport = new D3D11_VIEWPORT(0, 0, swapchainSize.Width, swapchainSize.Height);
-        Context->RSSetViewports(1, &viewport);
+        Viewport = new Viewport(0, 0, swapchainSize.Width, swapchainSize.Height);
     }
 
     public override void ClearColorBuffer(Color color)
@@ -139,6 +163,28 @@ public unsafe class D3D11GraphicsDevice : GraphicsDevice
 
         ID3D11RenderTargetView* target = _swapchainTarget;
         Context->OMSetRenderTargets(1, &target, null);
+    }
+
+    public override void ResizeSwapchain(in Size<int> size)
+    {
+        // Unset the render targets.
+        Context->OMSetRenderTargets(0, null, null);
+
+        _swapchainTarget->Release();
+        _swapchainTexture->Release();
+
+        if (FAILED(_swapchain->ResizeBuffers(0, (uint) size.Width, (uint) size.Height, DXGI_FORMAT_UNKNOWN, SwapchainFlags)))
+            throw new Exception("Failed to resize swapchain buffers.");
+
+        ID3D11Texture2D* swapchainTexture;
+        if (FAILED(_swapchain->GetBuffer(0, __uuidof<ID3D11Texture2D>(), (void**) &swapchainTexture)))
+            throw new Exception("Failed to get swapchain buffer.");
+        _swapchainTexture = swapchainTexture;
+
+        ID3D11RenderTargetView* swapchainTarget;
+        if (FAILED(Device->CreateRenderTargetView((ID3D11Resource*) swapchainTexture, null, &swapchainTarget)))
+            throw new Exception("Failed to create swapchain target.");
+        _swapchainTarget = swapchainTarget;
     }
 
     public override void Dispose()

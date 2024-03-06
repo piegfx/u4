@@ -5,6 +5,8 @@ namespace u4.Render.Backend;
 public abstract class GraphicsDevice : IDisposable
 {
     public abstract GraphicsApi Api { get; }
+    
+    public abstract Viewport Viewport { get; set; }
 
     public abstract void ClearColorBuffer(Color color);
 
@@ -24,6 +26,8 @@ public abstract class GraphicsDevice : IDisposable
     public abstract void DrawIndexed(uint indexCount);
     
     public abstract void Present();
+
+    public abstract void ResizeSwapchain(in Size<int> size);
 
     public abstract void Dispose();
 }
