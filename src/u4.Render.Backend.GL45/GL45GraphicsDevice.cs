@@ -3,31 +3,35 @@ using u4.Math;
 
 namespace u4.Render.Backend.GL45;
 
-public class GL45GraphicsDevice : GraphicsDevice
+public unsafe class GL45GraphicsDevice : GraphicsDevice
 {
     private GLContext _context;
-    private GL _gl;
+    
+    public GL Gl;
     
     public override GraphicsApi Api => GraphicsApi.OpenGL45;
     
     public override Viewport Viewport { get; set; }
 
-    public GL45GraphicsDevice(GLContext context, in Size<int> size)
+    public GL45GraphicsDevice(GLContext context, in Size<uint> size)
     {
         _context = context;
 
-        _gl = GL.GetApi(_context.GetProcAddressFunc);
+        Gl = GL.GetApi(_context.GetProcAddressFunc);
+        
+        Gl.Viewport(0, 0, size.Width, size.Height);
     }
     
     public override void ClearColorBuffer(Color color)
     {
-        _gl.ClearColor(color.R, color.G, color.B, color.A);
-        _gl.Clear(ClearBufferMask.ColorBufferBit);
+        Gl.ClearColor(color.R, color.G, color.B, color.A);
+        Gl.Clear(ClearBufferMask.ColorBufferBit);
     }
 
     public override GraphicsBuffer CreateBuffer<T>(in BufferDescription description, in ReadOnlySpan<T> data)
     {
-        throw new NotImplementedException();
+        fixed (void* pData = data)
+            return new GL45GraphicsBuffer(Gl, description, pData);
     }
 
     public override ShaderModule CreateShaderModuleFromFile(string path, ShaderStage stage, string entryPoint)
@@ -85,13 +89,10 @@ public class GL45GraphicsDevice : GraphicsDevice
         _context.Present(1);
     }
 
-    public override void ResizeSwapchain(in Size<int> size)
-    {
-        throw new NotImplementedException();
-    }
+    public override void ResizeSwapchain(in Size<int> size) { }
 
     public override void Dispose()
     {
-        _gl.Dispose();
+        Gl.Dispose();
     }
 }

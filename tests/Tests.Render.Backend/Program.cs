@@ -40,7 +40,7 @@ unsafe
     {
         sdl.GLSetSwapInterval(i);
         sdl.GLSwapWindow(window);
-    }), size);
+    }), size.As<uint>());
 
     ReadOnlySpan<float> vertices = stackalloc float[]
     {
@@ -56,7 +56,7 @@ unsafe
         1, 2, 3
     };
 
-    /*GraphicsBuffer vertexBuffer =
+    GraphicsBuffer vertexBuffer =
         device.CreateBuffer(new BufferDescription(BufferType.Vertex, (uint) vertices.Length * sizeof(float), false),
             vertices);
 
@@ -64,7 +64,7 @@ unsafe
         device.CreateBuffer(new BufferDescription(BufferType.Index, (uint) indices.Length * sizeof(uint), false),
             indices);
 
-    ShaderModule vertexShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Vertex, "Vertex");
+    /*ShaderModule vertexShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Vertex, "Vertex");
     ShaderModule pixelShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Pixel, "Pixel");
 
     ShaderAttachment[] attachments = new[]
@@ -122,11 +122,11 @@ unsafe
         device.Present();
     }
     
-    /*ayout.Dispose();
-    shader.Dispose();
+    /*layout.Dispose();
+    shader.Dispose();*/
     
     indexBuffer.Dispose();
-    vertexBuffer.Dispose();*/
+    vertexBuffer.Dispose();
     
     device.Dispose();
     
