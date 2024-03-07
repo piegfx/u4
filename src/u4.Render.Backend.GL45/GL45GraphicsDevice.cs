@@ -36,7 +36,7 @@ public unsafe class GL45GraphicsDevice : GraphicsDevice
 
     public override ShaderModule CreateShaderModuleFromFile(string path, ShaderStage stage, string entryPoint)
     {
-        throw new NotImplementedException();
+        return new GL45ShaderModule(Gl, File.ReadAllText(path), stage);
     }
 
     public override Shader CreateShader(in ReadOnlySpan<ShaderAttachment> attachments)
