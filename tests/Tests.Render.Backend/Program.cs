@@ -27,10 +27,10 @@ unsafe
 
     ReadOnlySpan<float> vertices = stackalloc float[]
     {
-        -0.5f, -0.5f, 0.0f,
-        -0.5f, +0.5f, 0.0f,
-        +0.5f, +0.5f, 0.0f,
-        +0.5f, -0.5f, 0.0f
+        -0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, +0.5f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f,
+        +0.5f, +0.5f, 0.0f,    0.0f, 0.0f, 1.0f, 1.0f,
+        +0.5f, -0.5f, 0.0f,    0.0f, 0.0f, 0.0f, 1.0f
     };
 
     ReadOnlySpan<uint> indices = stackalloc uint[]
@@ -96,7 +96,11 @@ unsafe
         device.SetShader(shader);
         device.SetPrimitiveType(PrimitiveType.TriangleList);
         
-        device.Draw(6);
+        device.SetInputLayout(layout);
+        device.SetVertexBuffer(0, vertexBuffer, 7 * sizeof(float));
+        device.SetIndexBuffer(indexBuffer, Format.R32UInt);
+        
+        device.DrawIndexed(6);
         
         device.Present();
     }

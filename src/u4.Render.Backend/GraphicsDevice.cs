@@ -24,6 +24,12 @@ public abstract class GraphicsDevice : IDisposable
     
     public abstract void SetShader(Shader shader);
 
+    public abstract void SetInputLayout(InputLayout layout);
+
+    public abstract void SetVertexBuffer(uint slot, GraphicsBuffer buffer, uint stride);
+
+    public abstract void SetIndexBuffer(GraphicsBuffer buffer, Format format);
+
     public abstract void Draw(uint vertexCount);
     
     public abstract void DrawIndexed(uint indexCount);

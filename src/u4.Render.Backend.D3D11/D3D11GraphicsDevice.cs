@@ -152,6 +152,26 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
         }
     }
 
+    public override void SetInputLayout(InputLayout layout)
+    {
+        D3D11InputLayout d3dLayout = (D3D11InputLayout) layout;
+        Context->IASetInputLayout(d3dLayout.Layout);
+    }
+
+    public override void SetVertexBuffer(uint slot, GraphicsBuffer buffer, uint stride)
+    {
+        D3D11GraphicsBuffer d3dBuffer = (D3D11GraphicsBuffer) buffer;
+        ID3D11Buffer* vBuffer = d3dBuffer.Buffer;
+        uint offset = 0;
+        Context->IASetVertexBuffers(slot, 1, &vBuffer, &stride, &offset);
+    }
+
+    public override void SetIndexBuffer(GraphicsBuffer buffer, Format format)
+    {
+        D3D11GraphicsBuffer d3dBuffer = (D3D11GraphicsBuffer) buffer;
+        Context->IASetIndexBuffer(d3dBuffer.Buffer, format.ToDxgiFormat(), 0);
+    }
+
     public override void Draw(uint vertexCount)
     {
         Context->Draw(vertexCount, 0);
