@@ -1,8 +1,8 @@
 static float2 RectVerts[] = {
-    float2(-1.0, -1.0),
-    float2(-1.0, +1.0),
-    float2(+1.0, +1.0),
-    float2(+1.0, -1.0)
+    float2(-0.5, -0.5),
+    float2(-0.5, +0.5),
+    float2(+0.5, +0.5),
+    float2(+0.5, -0.5)
 };
 
 static float4 RectColors[] = {

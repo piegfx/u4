@@ -57,6 +57,12 @@ unsafe
     };
 
     Shader shader = device.CreateShader(attachments);
+
+    InputLayout layout = device.CreateInputLayout(new InputLayoutDescription[]
+    {
+        new InputLayoutDescription("POSITION", 0, Format.R32G32B32Float, 0, 0, InputType.PerVertex),
+        new InputLayoutDescription("COLOR", 0, Format.R32G32B32A32Float, 12, 0, InputType.PerVertex)
+    }, vertexShader);
     
     pixelShader.Dispose();
     vertexShader.Dispose();
@@ -78,8 +84,7 @@ unsafe
                         
                         case WindowEventID.Resized:
                             device.ResizeSwapchain(new Size<int>(sEvent.Window.Data1, sEvent.Window.Data2));
-                            device.Viewport = new Viewport(0, 0, (uint) sEvent.Window.Data1,
-                                (uint) sEvent.Window.Data2);
+                            device.Viewport = new Viewport(0, 0, (uint) sEvent.Window.Data1, (uint) sEvent.Window.Data2);
                             break;
                     }
                     break;
@@ -96,6 +101,7 @@ unsafe
         device.Present();
     }
     
+    layout.Dispose();
     shader.Dispose();
     
     indexBuffer.Dispose();

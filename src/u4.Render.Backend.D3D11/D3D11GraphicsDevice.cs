@@ -120,6 +120,11 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
         return new D3D11Shader(Device, attachments);
     }
 
+    public override InputLayout CreateInputLayout(in ReadOnlySpan<InputLayoutDescription> descriptions, ShaderModule vertexModule)
+    {
+        return new D3D11InputLayout(Device, descriptions, ((D3D11ShaderModule) vertexModule).Blob);
+    }
+
     public override void SetPrimitiveType(PrimitiveType type)
     {
         Context->IASetPrimitiveTopology(type.ToPrimitiveTopology());
