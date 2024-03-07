@@ -1,9 +1,13 @@
 ﻿using System;
+using Silk.NET.OpenGL;
 using Silk.NET.SDL;
 using u4.Math;
 using u4.Render.Backend;
 using u4.Render.Backend.D3D11;
+using u4.Render.Backend.GL45;
 using Color = u4.Math.Color;
+using PrimitiveType = u4.Render.Backend.PrimitiveType;
+using Shader = u4.Render.Backend.Shader;
 
 unsafe
 {
@@ -14,16 +18,29 @@ unsafe
 
     Size<int> size = new Size<int>(1280, 720);
 
+    sdl.GLSetAttribute(GLattr.ContextMajorVersion, 4);
+    sdl.GLSetAttribute(GLattr.ContextMinorVersion, 5);
+    sdl.GLSetAttribute(GLattr.ContextProfileMask, (int) ContextProfileMask.CoreProfileBit);
+
     Window* window = sdl.CreateWindow("Test", Sdl.WindowposCentered, Sdl.WindowposCentered, size.Width, size.Height,
-        (uint) (WindowFlags.Shown | WindowFlags.Resizable));
+        (uint) (WindowFlags.Shown | WindowFlags.Resizable | WindowFlags.Opengl));
 
     if (window == null)
         throw new Exception("Failed to create window.");
 
-    SysWMInfo info = new SysWMInfo();
+    void* sdlGlContext = sdl.GLCreateContext(window);
+    sdl.GLMakeCurrent(window, sdlGlContext);
+
+    /*SysWMInfo info = new SysWMInfo();
     sdl.GetWindowWMInfo(window, &info);
 
-    GraphicsDevice device = new D3D11GraphicsDevice(info.Info.Win.Hwnd, size.As<uint>());
+    GraphicsDevice device = new D3D11GraphicsDevice(info.Info.Win.Hwnd, size.As<uint>());*/
+
+    GraphicsDevice device = new GL45GraphicsDevice(new GLContext(s => (nint) sdl.GLGetProcAddress(s), i =>
+    {
+        sdl.GLSetSwapInterval(i);
+        sdl.GLSwapWindow(window);
+    }), size);
 
     ReadOnlySpan<float> vertices = stackalloc float[]
     {
@@ -39,7 +56,7 @@ unsafe
         1, 2, 3
     };
 
-    GraphicsBuffer vertexBuffer =
+    /*GraphicsBuffer vertexBuffer =
         device.CreateBuffer(new BufferDescription(BufferType.Vertex, (uint) vertices.Length * sizeof(float), false),
             vertices);
 
@@ -65,7 +82,7 @@ unsafe
     }, vertexShader);
     
     pixelShader.Dispose();
-    vertexShader.Dispose();
+    vertexShader.Dispose();*/
 
     bool shouldClose = false;
     while (!shouldClose)
@@ -93,23 +110,23 @@ unsafe
         
         device.ClearColorBuffer(Color.CornflowerBlue);
         
-        device.SetShader(shader);
+        /*device.SetShader(shader);
         device.SetPrimitiveType(PrimitiveType.TriangleList);
         
         device.SetInputLayout(layout);
         device.SetVertexBuffer(0, vertexBuffer, 7 * sizeof(float));
         device.SetIndexBuffer(indexBuffer, Format.R32UInt);
         
-        device.DrawIndexed(6);
+        device.DrawIndexed(6);*/
         
         device.Present();
     }
     
-    layout.Dispose();
+    /*ayout.Dispose();
     shader.Dispose();
     
     indexBuffer.Dispose();
-    vertexBuffer.Dispose();
+    vertexBuffer.Dispose();*/
     
     device.Dispose();
     

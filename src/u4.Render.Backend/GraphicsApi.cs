@@ -3,5 +3,5 @@
 public enum GraphicsApi
 {
     Direct3D11,
-    Vulkan
+    OpenGL45
 }
