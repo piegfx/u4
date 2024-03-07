@@ -73,9 +73,9 @@ unsafe
         new ShaderAttachment(pixelShader, ShaderStage.Pixel)
     };
 
-    /*Shader shader = device.CreateShader(attachments);
+    Shader shader = device.CreateShader(attachments);
 
-    InputLayout layout = device.CreateInputLayout(new InputLayoutDescription[]
+    /*InputLayout layout = device.CreateInputLayout(new InputLayoutDescription[]
     {
         new InputLayoutDescription("POSITION", 0, Format.R32G32B32Float, 0, 0, InputType.PerVertex),
         new InputLayoutDescription("COLOR", 0, Format.R32G32B32A32Float, 12, 0, InputType.PerVertex)
@@ -122,8 +122,8 @@ unsafe
         device.Present();
     }
     
-    /*layout.Dispose();
-    shader.Dispose();*/
+    //layout.Dispose();
+    shader.Dispose();
     
     indexBuffer.Dispose();
     vertexBuffer.Dispose();

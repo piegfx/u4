@@ -41,7 +41,7 @@ public unsafe class GL45GraphicsDevice : GraphicsDevice
 
     public override Shader CreateShader(in ReadOnlySpan<ShaderAttachment> attachments)
     {
-        throw new NotImplementedException();
+        return new GL45Shader(Gl, attachments);
     }
 
     public override InputLayout CreateInputLayout(in ReadOnlySpan<InputLayoutDescription> descriptions, ShaderModule vertexModule)
