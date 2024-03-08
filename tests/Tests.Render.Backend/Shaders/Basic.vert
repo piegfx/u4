@@ -26,9 +26,9 @@ const uint RectIndices[] = {
 
 void main()
 {
-    //gl_Position = vec4(aPosition, 1.0);
-    //frag_Color = aColor;
+    gl_Position = vec4(aPosition, 1.0);
+    frag_Color = aColor;
     
-    gl_Position = vec4(RectVerts[RectIndices[gl_VertexID]], 0.0, 1.0);
-    frag_Color = RectColors[RectIndices[gl_VertexID]];
+    //gl_Position = vec4(RectVerts[RectIndices[gl_VertexID]], 0.0, 1.0);
+    //frag_Color = RectColors[RectIndices[gl_VertexID]];
 }

@@ -111,19 +111,14 @@ unsafe
         
         device.ClearColorBuffer(Color.CornflowerBlue);
         
-        /*device.SetShader(shader);
-        device.SetPrimitiveType(PrimitiveType.TriangleList);
-        
-        device.SetInputLayout(layout);
-        device.SetVertexBuffer(0, vertexBuffer, 7 * sizeof(float));
-        device.SetIndexBuffer(indexBuffer, Format.R32UInt);
-        
-        device.DrawIndexed(6);*/
-        
         device.SetShader(shader);
         device.SetPrimitiveType(PrimitiveType.TriangleList);
         
-        device.Draw(6);
+        device.SetVertexBuffer(0, vertexBuffer, 7 * sizeof(float));
+        device.SetIndexBuffer(indexBuffer, Format.R32UInt);
+        device.SetInputLayout(layout);
+        
+        device.DrawIndexed(6);
         
         device.Present();
     }

@@ -13,10 +13,12 @@ internal sealed class GL45InputLayout : InputLayout
         _gl = gl;
         
         Vao = gl.CreateVertexArray();
-        gl.BindVertexArray(Vao);
 
         for (int i = 0; i < descriptions.Length; i++)
         {
+            gl.EnableVertexArrayAttrib(Vao, (uint) i);
+            gl.VertexArrayAttribBinding(Vao, (uint) i, descriptions[i].Slot);
+            
             switch (descriptions[i].Format)
             {
                 case Format.R1UNorm:
