@@ -46,7 +46,7 @@ public unsafe class GL45GraphicsDevice : GraphicsDevice
 
     public override InputLayout CreateInputLayout(in ReadOnlySpan<InputLayoutDescription> descriptions, ShaderModule vertexModule)
     {
-        throw new NotImplementedException();
+        return new GL45InputLayout(Gl, descriptions);
     }
 
     public override void SetPrimitiveType(PrimitiveType type)
