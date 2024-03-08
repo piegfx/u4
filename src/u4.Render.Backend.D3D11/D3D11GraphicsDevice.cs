@@ -125,6 +125,11 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
         return new D3D11InputLayout(Device, descriptions, ((D3D11ShaderModule) vertexModule).Blob);
     }
 
+    public override Texture CreateTexture<T>(in TextureDescription description, in ReadOnlySpan<T> data)
+    {
+        throw new NotImplementedException();
+    }
+
     public override void SetPrimitiveType(PrimitiveType type)
     {
         Context->IASetPrimitiveTopology(type.ToPrimitiveTopology());

@@ -20,6 +20,9 @@ public abstract class GraphicsDevice : IDisposable
     public abstract InputLayout CreateInputLayout(in ReadOnlySpan<InputLayoutDescription> descriptions,
         ShaderModule vertexModule);
 
+    public abstract Texture CreateTexture<T>(in TextureDescription description, in ReadOnlySpan<T> data)
+        where T : unmanaged;
+
     public abstract void SetPrimitiveType(PrimitiveType type);
     
     public abstract void SetShader(Shader shader);

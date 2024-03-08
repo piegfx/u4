@@ -71,6 +71,11 @@ public sealed unsafe class GL45GraphicsDevice : GraphicsDevice
         return new GL45InputLayout(Gl, descriptions);
     }
 
+    public override Texture CreateTexture<T>(in TextureDescription description, in ReadOnlySpan<T> data)
+    {
+        throw new NotImplementedException();
+    }
+
     public override void SetPrimitiveType(PrimitiveType type)
     {
         _primitiveType = type switch

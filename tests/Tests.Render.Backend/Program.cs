@@ -24,24 +24,26 @@ unsafe
     sdl.GLSetAttribute(GLattr.DepthSize, 0);
 
     Window* window = sdl.CreateWindow("Test", Sdl.WindowposCentered, Sdl.WindowposCentered, size.Width, size.Height,
-        (uint) (WindowFlags.Shown | WindowFlags.Resizable | WindowFlags.Opengl));
+        (uint) (WindowFlags.Shown | WindowFlags.Resizable));
 
     if (window == null)
         throw new Exception("Failed to create window.");
 
-    void* sdlGlContext = sdl.GLCreateContext(window);
-    sdl.GLMakeCurrent(window, sdlGlContext);
+    //void* sdlGlContext = sdl.GLCreateContext(window);
+    //sdl.GLMakeCurrent(window, sdlGlContext);
 
-    /*SysWMInfo info = new SysWMInfo();
+    SysWMInfo info = new SysWMInfo();
     sdl.GetWindowWMInfo(window, &info);
 
-    GraphicsDevice device = new D3D11GraphicsDevice(info.Info.Win.Hwnd, size.As<uint>());*/
+    GraphicsDevice device = new D3D11GraphicsDevice(info.Info.Win.Hwnd, size.As<uint>());
 
-    GraphicsDevice device = new GL45GraphicsDevice(new GLContext(s => (nint) sdl.GLGetProcAddress(s), i =>
+    /*GraphicsDevice device = new GL45GraphicsDevice(new GLContext(s => (nint) sdl.GLGetProcAddress(s), i =>
     {
         sdl.GLSetSwapInterval(i);
         sdl.GLSwapWindow(window);
-    }), size.As<uint>());
+    }), size.As<uint>());*/
+    
+    sdl.SetWindowTitle(window, sdl.GetWindowTitleS(window) + $" - {device.Api}");
 
     ReadOnlySpan<float> vertices = stackalloc float[]
     {
@@ -65,8 +67,8 @@ unsafe
         device.CreateBuffer(new BufferDescription(BufferType.Index, (uint) indices.Length * sizeof(uint), false),
             indices);
 
-    ShaderModule vertexShader = device.CreateShaderModuleFromFile("Shaders/Basic.vert", ShaderStage.Vertex, "Vertex");
-    ShaderModule pixelShader = device.CreateShaderModuleFromFile("Shaders/Basic.frag", ShaderStage.Pixel, "Pixel");
+    ShaderModule vertexShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Vertex, "Vertex");
+    ShaderModule pixelShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Pixel, "Pixel");
 
     ShaderAttachment[] attachments = new[]
     {
