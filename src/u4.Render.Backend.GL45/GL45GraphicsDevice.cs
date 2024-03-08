@@ -146,10 +146,15 @@ public sealed unsafe class GL45GraphicsDevice : GraphicsDevice
     private void BindBuffersToVao()
     {
         Gl.BindVertexArray(_currentVao);
-        
+
         for (uint i = 0; i < _boundVbos.Length; i++)
+        {
+            if (_boundVbos[i].buffer == 0)
+                continue;
+            
             Gl.VertexArrayVertexBuffer(_currentVao, i, _boundVbos[i].buffer, IntPtr.Zero, _boundVbos[i].stride);
-        
+        }
+
         Gl.VertexArrayElementBuffer(_currentVao, _currentEbo);
     }
 }
