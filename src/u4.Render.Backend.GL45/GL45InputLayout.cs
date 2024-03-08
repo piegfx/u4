@@ -13,6 +13,7 @@ internal sealed class GL45InputLayout : InputLayout
         _gl = gl;
         
         Vao = gl.CreateVertexArray();
+        gl.BindVertexArray(Vao);
 
         for (int i = 0; i < descriptions.Length; i++)
         {

@@ -3,23 +3,38 @@ using u4.Math;
 
 namespace u4.Render.Backend.GL45;
 
-public unsafe class GL45GraphicsDevice : GraphicsDevice
+public sealed unsafe class GL45GraphicsDevice : GraphicsDevice
 {
     private GLContext _context;
+    private Size<uint> _currentSize;
+    private Silk.NET.OpenGL.PrimitiveType _primitiveType;
+    private Viewport _viewport;
     
     public GL Gl;
     
     public override GraphicsApi Api => GraphicsApi.OpenGL45;
-    
-    public override Viewport Viewport { get; set; }
+
+    public override Viewport Viewport
+    {
+        get => _viewport;
+        set
+        {
+            _viewport = value;
+            
+            // Convert D3D top-left viewport to GL viewport.
+            Gl.Viewport(value.X,(int) _currentSize.Height - (int) value.Height - value.Y, value.Width, value.Height);
+        }
+    }
 
     public GL45GraphicsDevice(GLContext context, in Size<uint> size)
     {
         _context = context;
+        _currentSize = size;
 
         Gl = GL.GetApi(_context.GetProcAddressFunc);
+
+        Viewport = new Viewport(0, 0, size.Width, size.Height);
         
-        Gl.Viewport(0, 0, size.Width, size.Height);
     }
     
     public override void ClearColorBuffer(Color color)
@@ -51,12 +66,17 @@ public unsafe class GL45GraphicsDevice : GraphicsDevice
 
     public override void SetPrimitiveType(PrimitiveType type)
     {
-        throw new NotImplementedException();
+        _primitiveType = type switch
+        {
+            PrimitiveType.TriangleList => Silk.NET.OpenGL.PrimitiveType.Triangles,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
     }
 
     public override void SetShader(Shader shader)
     {
-        throw new NotImplementedException();
+        GL45Shader glShader = (GL45Shader) shader;
+        Gl.UseProgram(glShader.Program);
     }
 
     public override void SetInputLayout(InputLayout layout)
@@ -76,7 +96,7 @@ public unsafe class GL45GraphicsDevice : GraphicsDevice
 
     public override void Draw(uint vertexCount)
     {
-        throw new NotImplementedException();
+        Gl.DrawArrays(_primitiveType, 0, vertexCount);
     }
 
     public override void DrawIndexed(uint indexCount)
@@ -89,7 +109,12 @@ public unsafe class GL45GraphicsDevice : GraphicsDevice
         _context.Present(1);
     }
 
-    public override void ResizeSwapchain(in Size<int> size) { }
+    public override void ResizeSwapchain(in Size<int> size)
+    {
+        _currentSize = size.As<uint>();
+        // To make behaviour consistent with D3D, we set the viewport to itself to ensure it stays at the top left.
+        Viewport = _viewport;
+    }
 
     public override void Dispose()
     {

@@ -21,6 +21,7 @@ unsafe
     sdl.GLSetAttribute(GLattr.ContextMajorVersion, 4);
     sdl.GLSetAttribute(GLattr.ContextMinorVersion, 5);
     sdl.GLSetAttribute(GLattr.ContextProfileMask, (int) ContextProfileMask.CoreProfileBit);
+    sdl.GLSetAttribute(GLattr.DepthSize, 0);
 
     Window* window = sdl.CreateWindow("Test", Sdl.WindowposCentered, Sdl.WindowposCentered, size.Width, size.Height,
         (uint) (WindowFlags.Shown | WindowFlags.Resizable | WindowFlags.Opengl));
@@ -75,11 +76,11 @@ unsafe
 
     Shader shader = device.CreateShader(attachments);
 
-    /*InputLayout layout = device.CreateInputLayout(new InputLayoutDescription[]
+    InputLayout layout = device.CreateInputLayout(new InputLayoutDescription[]
     {
         new InputLayoutDescription("POSITION", 0, Format.R32G32B32Float, 0, 0, InputType.PerVertex),
         new InputLayoutDescription("COLOR", 0, Format.R32G32B32A32Float, 12, 0, InputType.PerVertex)
-    }, vertexShader);*/
+    }, vertexShader);
     
     pixelShader.Dispose();
     vertexShader.Dispose();
@@ -119,10 +120,15 @@ unsafe
         
         device.DrawIndexed(6);*/
         
+        device.SetShader(shader);
+        device.SetPrimitiveType(PrimitiveType.TriangleList);
+        
+        device.Draw(6);
+        
         device.Present();
     }
     
-    //layout.Dispose();
+    layout.Dispose();
     shader.Dispose();
     
     indexBuffer.Dispose();
