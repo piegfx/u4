@@ -84,7 +84,9 @@ internal sealed unsafe class D3D11Texture : Texture
 
         if (data != null)
         {
-            //context->UpdateSubresource(Texture, 0, null, data, )
+            uint bpp = description.Format.BitsPerPixel() / 8;
+
+            context->UpdateSubresource(Texture, 0, null, data, description.Width * bpp, 0);
         }
     }
     

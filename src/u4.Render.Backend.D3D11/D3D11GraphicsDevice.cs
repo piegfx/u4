@@ -127,7 +127,8 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
 
     public override Texture CreateTexture<T>(in TextureDescription description, in ReadOnlySpan<T> data)
     {
-        throw new NotImplementedException();
+        fixed (void* pData = data)
+            return new D3D11Texture(Device, Context, description, pData);
     }
 
     public override void SetPrimitiveType(PrimitiveType type)
@@ -155,6 +156,14 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
                     throw new ArgumentOutOfRangeException();
             }
         }
+    }
+
+    public override void SetTexture(uint slot, Texture texture)
+    {
+        D3D11Texture d3dTexture = (D3D11Texture) texture;
+
+        ID3D11ShaderResourceView* textureSrv = d3dTexture.TextureSrv;
+        Context->PSSetShaderResources(slot, 1, &textureSrv);
     }
 
     public override void SetInputLayout(InputLayout layout)
@@ -185,6 +194,13 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
     public override void DrawIndexed(uint indexCount)
     {
         Context->DrawIndexed(indexCount, 0, 0);
+    }
+
+    public override void GenerateMipmaps(Texture texture)
+    {
+        D3D11Texture d3dTexture = (D3D11Texture) texture;
+
+        Context->GenerateMips(d3dTexture.TextureSrv);
     }
 
     public override void Present()

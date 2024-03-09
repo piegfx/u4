@@ -91,6 +91,11 @@ public sealed unsafe class GL45GraphicsDevice : GraphicsDevice
         Gl.UseProgram(glShader.Program);
     }
 
+    public override void SetTexture(uint slot, Texture texture)
+    {
+        throw new NotImplementedException();
+    }
+
     public override void SetInputLayout(InputLayout layout)
     {
         GL45InputLayout glLayout = (GL45InputLayout) layout;
@@ -129,6 +134,11 @@ public sealed unsafe class GL45GraphicsDevice : GraphicsDevice
     {
         BindBuffersToVao();
         Gl.DrawElements(_primitiveType, indexCount, _drawElementsType, (void*) 0);
+    }
+
+    public override void GenerateMipmaps(Texture texture)
+    {
+        throw new NotImplementedException();
     }
 
     public override void Present()

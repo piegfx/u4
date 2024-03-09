@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using Silk.NET.OpenGL;
 using Silk.NET.SDL;
+using StbImageSharp;
 using u4.Math;
 using u4.Render.Backend;
 using u4.Render.Backend.D3D11;
@@ -8,6 +10,7 @@ using u4.Render.Backend.GL45;
 using Color = u4.Math.Color;
 using PrimitiveType = u4.Render.Backend.PrimitiveType;
 using Shader = u4.Render.Backend.Shader;
+using Texture = u4.Render.Backend.Texture;
 
 unsafe
 {
@@ -47,10 +50,10 @@ unsafe
 
     ReadOnlySpan<float> vertices = stackalloc float[]
     {
-        -0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f,
-        -0.5f, +0.5f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f,
-        +0.5f, +0.5f, 0.0f,    0.0f, 0.0f, 1.0f, 1.0f,
-        +0.5f, -0.5f, 0.0f,    0.0f, 0.0f, 0.0f, 1.0f
+        -0.5f, -0.5f, 0.0f,    0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, +0.5f, 0.0f,    0.0f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f,
+        +0.5f, +0.5f, 0.0f,    1.0f, 0.0f,    0.0f, 0.0f, 1.0f, 1.0f,
+        +0.5f, -0.5f, 0.0f,    1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f
     };
 
     ReadOnlySpan<uint> indices = stackalloc uint[]
@@ -81,11 +84,21 @@ unsafe
     InputLayout layout = device.CreateInputLayout(new InputLayoutDescription[]
     {
         new InputLayoutDescription("POSITION", 0, Format.R32G32B32Float, 0, 0, InputType.PerVertex),
-        new InputLayoutDescription("COLOR", 0, Format.R32G32B32A32Float, 12, 0, InputType.PerVertex)
+        new InputLayoutDescription("TEXCOORD", 0, Format.R32G32Float, 12, 0, InputType.PerVertex),
+        new InputLayoutDescription("COLOR", 0, Format.R32G32B32A32Float, 20, 0, InputType.PerVertex)
     }, vertexShader);
     
     pixelShader.Dispose();
     vertexShader.Dispose();
+    
+    ImageResult result = ImageResult.FromMemory(File.ReadAllBytes("Content/bagel.png"));
+
+    Texture texture =
+        device.CreateTexture<byte>(
+            TextureDescription.Texture2D((uint) result.Width, (uint) result.Height, Format.R8G8B8A8UNorm, 0, 1,
+                TextureUsage.ShaderResource | TextureUsage.GenerateMipmaps), result.Data);
+    
+    device.GenerateMipmaps(texture);
 
     bool shouldClose = false;
     while (!shouldClose)
@@ -116,7 +129,9 @@ unsafe
         device.SetShader(shader);
         device.SetPrimitiveType(PrimitiveType.TriangleList);
         
-        device.SetVertexBuffer(0, vertexBuffer, 7 * sizeof(float));
+        device.SetTexture(0, texture);
+        
+        device.SetVertexBuffer(0, vertexBuffer, 9 * sizeof(float));
         device.SetIndexBuffer(indexBuffer, Format.R32UInt);
         device.SetInputLayout(layout);
         
@@ -124,6 +139,8 @@ unsafe
         
         device.Present();
     }
+    
+    texture.Dispose();
     
     layout.Dispose();
     shader.Dispose();
