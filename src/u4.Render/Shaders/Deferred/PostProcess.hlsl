@@ -14,8 +14,9 @@ struct PSOutput
     float4 Color: SV_Target0;
 };
 
-Texture2D AlbedoTexture : register(t0);
 SamplerState State      : register(s0);
+Texture2D AlbedoTexture : register(t0);
+Texture2D PositionTexture : register(t1);
 
 VSOutput Vertex(const in VSInput input)
 {
@@ -29,10 +30,10 @@ VSOutput Vertex(const in VSInput input)
     };
 
     const float2 texCoords[] = {
-        float2(0.0, 0.0),
-        float2(1.0, 0.0),
+        float2(0.0, 1.0),
         float2(1.0, 1.0),
-        float2(0.0, 1.0)
+        float2(1.0, 0.0),
+        float2(0.0, 0.0)
     };
 
     const uint indices[] = {

@@ -17,6 +17,7 @@ public class DeferredRenderer : Renderer
 
     private readonly Framebuffer _gBuffer;
     private readonly Pie.Texture _albedoBuffer;
+    private readonly Pie.Texture _positionBuffer;
     private readonly Pie.Texture _depthBuffer;
 
     private readonly Shader _gBufferShader;
@@ -45,6 +46,7 @@ public class DeferredRenderer : Renderer
             Format.R32G32B32A32_Float, 1, 1, TextureUsage.Framebuffer | TextureUsage.ShaderResource);
 
         _albedoBuffer = device.CreateTexture(gBufferDesc);
+        _positionBuffer = device.CreateTexture(gBufferDesc);
 
         gBufferDesc.Format = Format.D32_Float;
         gBufferDesc.Usage = TextureUsage.Framebuffer;
@@ -54,6 +56,7 @@ public class DeferredRenderer : Renderer
         _gBuffer = device.CreateFramebuffer(new[]
         {
             new FramebufferAttachment(_albedoBuffer),
+            new FramebufferAttachment(_positionBuffer),
             new FramebufferAttachment(_depthBuffer)
         });
 
@@ -157,6 +160,7 @@ public class DeferredRenderer : Renderer
         _device.SetShader(_postProcessShader);
         
         _device.SetTexture(0, _albedoBuffer, _samplerState);
+        _device.SetTexture(1, _positionBuffer, _samplerState);
         
         _device.Draw(6);
         

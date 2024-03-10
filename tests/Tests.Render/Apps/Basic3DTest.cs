@@ -49,7 +49,7 @@ public class Basic3DTest : TestApp
         renderer.ClearColor = Color.CornflowerBlue;
         
         renderer.Clear();
-        renderer.Draw(_renderable, Matrix4x4.CreateFromYawPitchRoll(_value, _value, _value));
+        renderer.Draw(_renderable, Matrix4x4.CreateFromYawPitchRoll(_value, _value, _value) * Matrix4x4.CreateTranslation(1, 1, 0));
 
         System.Drawing.Size winSize = Window.FramebufferSize;
         Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(45 * (float.Pi / 180),
