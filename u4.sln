@@ -24,8 +24,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Render.Backend", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Engine", "tests\Tests.Engine\Tests.Engine.csproj", "{52CD90EE-B406-471A-AE1F-4A347B4FDC2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "u4.Render.Backend.GL45", "src\u4.Render.Backend.GL45\u4.Render.Backend.GL45.csproj", "{CC793AC4-454F-46E9-B74F-E2395A57D407}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,10 +74,6 @@ Global
 		{52CD90EE-B406-471A-AE1F-4A347B4FDC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52CD90EE-B406-471A-AE1F-4A347B4FDC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52CD90EE-B406-471A-AE1F-4A347B4FDC2C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC793AC4-454F-46E9-B74F-E2395A57D407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC793AC4-454F-46E9-B74F-E2395A57D407}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC793AC4-454F-46E9-B74F-E2395A57D407}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC793AC4-454F-46E9-B74F-E2395A57D407}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{07B75100-FA35-4877-B027-6FD6794AC446} = {03D5212E-DA5F-40E6-802D-3BC33B50487C}

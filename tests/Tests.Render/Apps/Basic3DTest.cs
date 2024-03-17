@@ -17,10 +17,10 @@ public class Basic3DTest : TestApp
 
         Vertex[] vertices = new[]
         {
-            new Vertex(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 0), Vector3.Zero, Color.Red),
-            new Vertex(new Vector3(-0.5f, +0.5f, 0), new Vector2(0, 1), Vector3.Zero, Color.Green),
-            new Vertex(new Vector3(+0.5f, +0.5f, 0), new Vector2(1, 1), Vector3.Zero, Color.Blue),
-            new Vertex(new Vector3(+0.5f, -0.5f, 0), new Vector2(1, 0), Vector3.Zero, Color.Yellow)
+            new Vertex(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 1), Vector3.Zero, Color.Red),
+            new Vertex(new Vector3(-0.5f, +0.5f, 0), new Vector2(0, 0), Vector3.Zero, Color.Green),
+            new Vertex(new Vector3(+0.5f, +0.5f, 0), new Vector2(1, 0), Vector3.Zero, Color.Blue),
+            new Vertex(new Vector3(+0.5f, -0.5f, 0), new Vector2(1, 1), Vector3.Zero, Color.Yellow)
         };
 
         uint[] indices = new uint[]
@@ -49,7 +49,7 @@ public class Basic3DTest : TestApp
         renderer.ClearColor = Color.CornflowerBlue;
         
         renderer.Clear();
-        renderer.Draw(_renderable, Matrix4x4.CreateFromYawPitchRoll(_value, _value, _value) * Matrix4x4.CreateTranslation(1, 1, 0));
+        renderer.Draw(_renderable, Matrix4x4.CreateFromYawPitchRoll(_value, _value, _value));
 
         System.Drawing.Size winSize = Window.FramebufferSize;
         Matrix4x4 projection = Matrix4x4.CreatePerspectiveFieldOfView(45 * (float.Pi / 180),

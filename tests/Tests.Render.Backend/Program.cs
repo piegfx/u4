@@ -6,7 +6,6 @@ using StbImageSharp;
 using u4.Math;
 using u4.Render.Backend;
 using u4.Render.Backend.D3D11;
-using u4.Render.Backend.GL45;
 using Color = u4.Math.Color;
 using PrimitiveType = u4.Render.Backend.PrimitiveType;
 using Shader = u4.Render.Backend.Shader;

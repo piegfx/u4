@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\u4.Render.Backend.D3D11\u4.Render.Backend.D3D11.csproj" />
-      <ProjectReference Include="..\..\src\u4.Render.Backend.GL45\u4.Render.Backend.GL45.csproj" />
       <ProjectReference Include="..\..\src\u4.Render.Backend\u4.Render.Backend.csproj" />
     </ItemGroup>
 
