@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Silk.NET.OpenGL;
+using System.Numerics;
 using Silk.NET.SDL;
 using StbImageSharp;
 using u4.Math;
@@ -20,30 +20,16 @@ unsafe
 
     Size<int> size = new Size<int>(1280, 720);
 
-    sdl.GLSetAttribute(GLattr.ContextMajorVersion, 4);
-    sdl.GLSetAttribute(GLattr.ContextMinorVersion, 5);
-    sdl.GLSetAttribute(GLattr.ContextProfileMask, (int) ContextProfileMask.CoreProfileBit);
-    sdl.GLSetAttribute(GLattr.DepthSize, 0);
-
     Window* window = sdl.CreateWindow("Test", Sdl.WindowposCentered, Sdl.WindowposCentered, size.Width, size.Height,
         (uint) (WindowFlags.Shown | WindowFlags.Resizable));
 
     if (window == null)
         throw new Exception("Failed to create window.");
 
-    //void* sdlGlContext = sdl.GLCreateContext(window);
-    //sdl.GLMakeCurrent(window, sdlGlContext);
-
     SysWMInfo info = new SysWMInfo();
     sdl.GetWindowWMInfo(window, &info);
 
     GraphicsDevice device = new D3D11GraphicsDevice(info.Info.Win.Hwnd, size.As<uint>());
-
-    /*GraphicsDevice device = new GL45GraphicsDevice(new GLContext(s => (nint) sdl.GLGetProcAddress(s), i =>
-    {
-        sdl.GLSetSwapInterval(i);
-        sdl.GLSwapWindow(window);
-    }), size.As<uint>());*/
     
     sdl.SetWindowTitle(window, sdl.GetWindowTitleS(window) + $" - {device.Api}");
 
@@ -68,6 +54,10 @@ unsafe
     GraphicsBuffer indexBuffer =
         device.CreateBuffer(new BufferDescription(BufferType.Index, (uint) indices.Length * sizeof(uint), false),
             indices);
+
+    GraphicsBuffer transformBuffer =
+        device.CreateBuffer(new BufferDescription(BufferType.Constant, (uint) sizeof(Matrix4x4), false),
+            Matrix4x4.CreateRotationZ(1));
 
     ShaderModule vertexShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Vertex, "Vertex");
     ShaderModule pixelShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Pixel, "Pixel");
@@ -128,7 +118,8 @@ unsafe
         device.SetShader(shader);
         device.SetPrimitiveType(PrimitiveType.TriangleList);
         
-        device.SetTexture(0, texture);
+        device.SetConstantBuffer(0, transformBuffer, ShaderStage.Vertex);
+        device.SetTexture(1, texture);
         
         device.SetVertexBuffer(0, vertexBuffer, 9 * sizeof(float));
         device.SetIndexBuffer(indexBuffer, Format.R32UInt);

@@ -10,6 +10,8 @@ public abstract class GraphicsDevice : IDisposable
 
     public abstract void ClearColorBuffer(Color color);
 
+    public abstract GraphicsBuffer CreateBuffer<T>(in BufferDescription description, T data) where T : unmanaged;
+    
     public abstract GraphicsBuffer CreateBuffer<T>(in BufferDescription description, in ReadOnlySpan<T> data)
         where T : unmanaged;
 
@@ -34,6 +36,8 @@ public abstract class GraphicsDevice : IDisposable
     public abstract void SetVertexBuffer(uint slot, GraphicsBuffer buffer, uint stride);
 
     public abstract void SetIndexBuffer(GraphicsBuffer buffer, Format format);
+
+    public abstract void SetConstantBuffer(uint slot, GraphicsBuffer buffer, ShaderStage stage);
 
     public abstract void Draw(uint vertexCount);
     

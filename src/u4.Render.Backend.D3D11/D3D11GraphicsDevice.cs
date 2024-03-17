@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text;
 using TerraFX.Interop.DirectX;
 using TerraFX.Interop.Windows;
@@ -104,6 +105,11 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
         Context->ClearRenderTargetView(_swapchainTarget, &color.R);
     }
 
+    public override GraphicsBuffer CreateBuffer<T>(in BufferDescription description, T data)
+    {
+        return new D3D11GraphicsBuffer(Device, description, Unsafe.AsPointer(ref data));
+    }
+
     public override GraphicsBuffer CreateBuffer<T>(in BufferDescription description, in ReadOnlySpan<T> data)
     {
         fixed (void* pData = data)
@@ -184,6 +190,24 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
     {
         D3D11GraphicsBuffer d3dBuffer = (D3D11GraphicsBuffer) buffer;
         Context->IASetIndexBuffer(d3dBuffer.Buffer, format.ToDxgiFormat(), 0);
+    }
+
+    public override void SetConstantBuffer(uint slot, GraphicsBuffer buffer, ShaderStage stage)
+    {
+        D3D11GraphicsBuffer d3dBuffer = (D3D11GraphicsBuffer) buffer;
+        ID3D11Buffer* buf = d3dBuffer.Buffer;
+
+        switch (stage)
+        {
+            case ShaderStage.Vertex:
+                Context->VSSetConstantBuffers(slot, 1, &buf);
+                break;
+            case ShaderStage.Pixel:
+                Context->PSSetConstantBuffers(slot, 1, &buf);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(stage), stage, null);
+        }
     }
 
     public override void Draw(uint vertexCount)

@@ -20,8 +20,13 @@ struct PSOutput
     float4 Color: SV_Target0;
 };
 
-Texture2D Texture    : register(t0);
-SamplerState Sampler : register(s0);
+cbuffer TransformBuffer : register(b0)
+{
+    float4x4 TransformMatrix;
+}
+
+Texture2D Texture    : register(t1);
+SamplerState Sampler : register(s1);
 
 VSOutput Vertex(const in VSInput input)
 {
@@ -29,7 +34,7 @@ VSOutput Vertex(const in VSInput input)
 
     //output.Position = float4(RectVerts[RectIndices[input.Index]], 0.0, 1.0);
     //output.Color = RectColors[RectIndices[input.Index]];
-    output.Position = float4(input.Position, 1.0);
+    output.Position = mul(TransformMatrix, float4(input.Position, 1.0));
     output.TexCoord = input.TexCoord;
     output.Color = input.Color;
     
