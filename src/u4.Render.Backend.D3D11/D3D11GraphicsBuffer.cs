@@ -10,13 +10,15 @@ namespace u4.Render.Backend.D3D11;
 [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
 internal sealed unsafe class D3D11GraphicsBuffer : GraphicsBuffer
 {
-    public ID3D11Buffer* Buffer;
+    public readonly ID3D11Buffer* Buffer;
+    public readonly bool Dynamic;
     
     public override BufferType Type { get; }
 
     public D3D11GraphicsBuffer(ID3D11Device* device, in BufferDescription description, void* data)
     {
         Type = description.Type;
+        Dynamic = description.Dynamic;
         
         D3D11_BIND_FLAG bindFlag = description.Type switch
         {

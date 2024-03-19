@@ -25,6 +25,12 @@ public abstract class GraphicsDevice : IDisposable
     public abstract Texture CreateTexture<T>(in TextureDescription description, in ReadOnlySpan<T> data)
         where T : unmanaged;
 
+    public abstract void UpdateBuffer<T>(GraphicsBuffer buffer, uint offsetInBytes, uint sizeInBytes, T data)
+        where T : unmanaged;
+
+    public abstract void UpdateBuffer<T>(GraphicsBuffer buffer, uint offsetInBytes, uint sizeInBytes,
+        in ReadOnlySpan<T> data) where T : unmanaged;
+
     public abstract void SetPrimitiveType(PrimitiveType type);
     
     public abstract void SetShader(Shader shader);

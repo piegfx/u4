@@ -56,8 +56,8 @@ unsafe
             indices);
 
     GraphicsBuffer transformBuffer =
-        device.CreateBuffer(new BufferDescription(BufferType.Constant, (uint) sizeof(Matrix4x4), false),
-            Matrix4x4.CreateRotationZ(1));
+        device.CreateBuffer(new BufferDescription(BufferType.Constant, (uint) sizeof(Matrix4x4), true),
+            Matrix4x4.Identity);
 
     ShaderModule vertexShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Vertex, "Vertex");
     ShaderModule pixelShader = device.CreateShaderModuleFromFile("Shaders/Basic.hlsl", ShaderStage.Pixel, "Pixel");
@@ -89,6 +89,8 @@ unsafe
     
     device.GenerateMipmaps(texture);
 
+    float time = 0;
+
     bool shouldClose = false;
     while (!shouldClose)
     {
@@ -112,6 +114,10 @@ unsafe
                     break;
             }
         }
+
+        time += 1 / 60.0f;
+        
+        device.UpdateBuffer(transformBuffer, 0, 64, Matrix4x4.CreateRotationZ(time));
         
         device.ClearColorBuffer(Color.CornflowerBlue);
         

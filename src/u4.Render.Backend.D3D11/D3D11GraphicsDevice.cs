@@ -9,6 +9,7 @@ using static TerraFX.Interop.DirectX.D3D_FEATURE_LEVEL;
 using static TerraFX.Interop.DirectX.D3D11_CREATE_DEVICE_FLAG;
 using static TerraFX.Interop.DirectX.DirectX;
 using static TerraFX.Interop.DirectX.D3D11;
+using static TerraFX.Interop.DirectX.D3D11_MAP;
 using static TerraFX.Interop.DirectX.DXGI;
 using static TerraFX.Interop.DirectX.DXGI_FORMAT;
 using static TerraFX.Interop.DirectX.DXGI_SWAP_CHAIN_FLAG;
@@ -135,6 +136,34 @@ public sealed unsafe class D3D11GraphicsDevice : GraphicsDevice
     {
         fixed (void* pData = data)
             return new D3D11Texture(Device, Context, description, pData);
+    }
+
+    public override void UpdateBuffer<T>(GraphicsBuffer buffer, uint offsetInBytes, uint sizeInBytes, T data)
+        => UpdateBuffer(buffer, offsetInBytes, sizeInBytes, new ReadOnlySpan<T>(ref data));
+
+    public override void UpdateBuffer<T>(GraphicsBuffer buffer, uint offsetInBytes, uint sizeInBytes, in ReadOnlySpan<T> data)
+    {
+        D3D11GraphicsBuffer d3dBuffer = (D3D11GraphicsBuffer) buffer;
+
+        if (d3dBuffer.Dynamic)
+        {
+            D3D11_MAPPED_SUBRESOURCE subresource;
+            if (FAILED(Context->Map((ID3D11Resource*) d3dBuffer.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subresource)))
+                throw new Exception("Failed to map buffer.");
+            
+            fixed (void* pData = data)
+                Unsafe.CopyBlock(subresource.pData, pData, sizeInBytes);
+
+            Context->Unmap((ID3D11Resource*) d3dBuffer.Buffer, 0);
+        }
+        else
+        {
+            D3D11_BOX box = new D3D11_BOX((int) offsetInBytes, 0, 0, (int) sizeInBytes, 1, 1);
+
+            // TODO: Is this actually working?
+            fixed (void* pData = data)
+                Context->UpdateSubresource((ID3D11Resource*) d3dBuffer.Buffer, 0, &box, pData, 0, 0);
+        }
     }
 
     public override void SetPrimitiveType(PrimitiveType type)
