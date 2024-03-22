@@ -7,7 +7,8 @@ add_library(u4 STATIC
         src/Window.cpp
         include/u4/Window.h
         include/u4/Math/Size.h
-        include/u4/Math/Types.h)
+        include/u4/Math/Types.h
+        include/u4/Math/Vector2.h)
 
 target_include_directories(${PROJECT_NAME} PRIVATE include/)
 
