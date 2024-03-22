@@ -1,6 +1,7 @@
 ﻿#include "u4/Window.h"
 #include "u4/Math/Vector2.h"
 #include "u4/Math/Vector3.h"
+#include "u4/Math/Vector4.h"
 
 #include <memory>
 #include <iostream>
@@ -8,10 +9,10 @@
 using namespace u4::Math;
 
 int main(int argc, char* argv[]) {
-    Vector3f vecA = Vector3f(1);
-    Vector3f vecB = { 0.9f, -2.3f, 4.5f };
+    Vector4f vecA = Vector4f(1);
+    Vector4f vecB = { 0.9f, -2.3f, 4.5f, 2 };
 
-    Vector3f vecC = vecA + vecB;
+    Vector4f vecC = vecA + vecB;
     std::cout << vecC.ToString() << std::endl;
     std::cout << "Length: " << vecC.Length() << ", Normalized: " << vecC.Normalize().ToString() << std::endl;
     
