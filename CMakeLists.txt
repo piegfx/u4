@@ -10,7 +10,8 @@ add_library(u4 STATIC
         include/u4/Math/Types.h
         include/u4/Math/Vector2.h
         include/u4/Math/Vector3.h
-        include/u4/Math/Vector4.h)
+        include/u4/Math/Vector4.h
+        include/u4/Math/Matrix4.h)
 
 target_include_directories(${PROJECT_NAME} PRIVATE include/)
 

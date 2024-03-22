@@ -2,6 +2,7 @@
 #include "u4/Math/Vector2.h"
 #include "u4/Math/Vector3.h"
 #include "u4/Math/Vector4.h"
+#include "u4/Math/Matrix4.h"
 
 #include <memory>
 #include <iostream>
@@ -15,6 +16,23 @@ int main(int argc, char* argv[]) {
     Vector4f vecC = vecA + vecB;
     std::cout << vecC.ToString() << std::endl;
     std::cout << "Length: " << vecC.Length() << ", Normalized: " << vecC.Normalize().ToString() << std::endl;
+
+    Matrix4f matA = {
+        1, 2, 3, 4,
+        5, 6, 7, 8,
+        9, 10, 11, 12,
+        13, 14, 15, 16
+    };
+
+    Matrix4f matB = {
+        16, 15, 14, 13,
+        12, 11, 10, 9,
+        8, 7, 6, 5,
+        4, 3, 2, 1
+    };
+
+    Matrix4f matC = matA * matB;
+    std::cout << matC.ToString() << std::endl;
     
     u4::WindowOptions options {
         .Size = { 1280, 720 },
