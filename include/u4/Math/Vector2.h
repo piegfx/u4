@@ -2,7 +2,7 @@
 
 #include "Types.h"
 
-#include "string"
+#include <string>
 
 namespace u4::Math {
 
@@ -28,7 +28,7 @@ namespace u4::Math {
 
         template<typename TOther>
         Vector2 As() {
-            return { static_cast<TOther>(X), static_cast<TOther>(X) };
+            return { static_cast<TOther>(X), static_cast<TOther>(Y) };
         }
 
         T Length() const {
