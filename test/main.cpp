@@ -1,4 +1,5 @@
 ﻿#include "u4/Window.h"
+#include "u4/Graphics/Graphics.h"
 #include "u4/Math/Vector2.h"
 #include "u4/Math/Vector3.h"
 #include "u4/Math/Vector4.h"
@@ -8,6 +9,7 @@
 #include <iostream>
 
 using namespace u4::Math;
+using namespace u4::Graphics;
 
 int main(int argc, char* argv[]) {
     Vector4f vecA = Vector4f(1);
@@ -40,6 +42,7 @@ int main(int argc, char* argv[]) {
     };
     
     auto window = std::make_unique<u4::Window>(options);
+    auto graphics = Graphics::CreateD3D11(window->Handle(), window->FramebufferSize());
 
     bool exists = true;
     while (exists) {

@@ -11,7 +11,11 @@ add_library(u4 STATIC
         include/u4/Math/Vector2.h
         include/u4/Math/Vector3.h
         include/u4/Math/Vector4.h
-        include/u4/Math/Matrix4.h)
+        include/u4/Math/Matrix4.h
+        src/Graphics/Graphics.cpp
+        include/u4/Graphics/Graphics.h
+        src/Graphics/D3D11/D3D11Graphics.cpp
+        src/Graphics/D3D11/D3D11Graphics.h)
 
 target_include_directories(${PROJECT_NAME} PRIVATE include/)
 
