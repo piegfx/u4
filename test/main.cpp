@@ -1,5 +1,6 @@
 ﻿#include "u4/Window.h"
 #include "u4/Graphics/Graphics.h"
+#include "u4/Graphics/Bitmap.h"
 #include "u4/Math/Vector2.h"
 #include "u4/Math/Vector3.h"
 #include "u4/Math/Vector4.h"
@@ -43,6 +44,8 @@ int main(int argc, char* argv[]) {
     
     auto window = std::make_unique<u4::Window>(options);
     auto graphics = Graphics::CreateD3D11(window->Handle(), window->FramebufferSize());
+
+    auto bitmap = Bitmap(R"(C:\Users\ollie\Pictures\awesomeface.png)");
 
     bool exists = true;
     while (exists) {

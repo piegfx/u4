@@ -15,7 +15,9 @@ add_library(u4 STATIC
         src/Graphics/Graphics.cpp
         include/u4/Graphics/Graphics.h
         src/Graphics/D3D11/D3D11Graphics.cpp
-        src/Graphics/D3D11/D3D11Graphics.h)
+        src/Graphics/D3D11/D3D11Graphics.h
+        src/Graphics/Bitmap.cpp
+        include/u4/Graphics/Bitmap.h)
 
 target_include_directories(${PROJECT_NAME} PRIVATE include/)
 
