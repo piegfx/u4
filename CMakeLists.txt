@@ -31,6 +31,10 @@ target_link_libraries(${PROJECT_NAME} PUBLIC SDL2::SDL2-static)
 # ---------- D3D11 ----------
 target_link_libraries(${PROJECT_NAME} PUBLIC d3d11 dxgi d3dcompiler)
 
+# ---------- STB ----------
+add_subdirectory(lib/stb)
+target_link_libraries(${PROJECT_NAME} PUBLIC stb)
+
 # ----- TEST -----
 add_executable(u4test test/main.cpp)
 
