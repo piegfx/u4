@@ -61,6 +61,8 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+
+        graphics->Present();
     }
     
     return 0;

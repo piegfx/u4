@@ -1,6 +1,7 @@
 ﻿#include "D3D11Graphics.h"
 
 #include <SDL_syswm.h>
+#include <dxgi.h>
 #include <stdexcept>
 
 namespace u4::Graphics::D3D11 {
@@ -52,5 +53,16 @@ namespace u4::Graphics::D3D11 {
         _swapChain->Release();
         Context->Release();
         Device->Release();
+    }
+
+    void D3D11Graphics::Present() {
+        Context->OMSetRenderTargets(1, &_swapChainTarget, nullptr);
+
+        float color[] = { 1.0f, 0.5f, 0.25f, 1.0f };
+        Context->ClearRenderTargetView(_swapChainTarget, color);
+        
+        if (FAILED(_swapChain->Present(1, 0))) {
+            throw std::runtime_error("Failed to present.");
+        }
     }
 }

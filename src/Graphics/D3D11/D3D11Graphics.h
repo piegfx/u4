@@ -3,7 +3,6 @@
 #include "u4/Graphics/Graphics.h"
 
 #include <d3d11.h>
-#include <dxgi.h>
 
 namespace u4::Graphics::D3D11 {
 
@@ -19,6 +18,8 @@ namespace u4::Graphics::D3D11 {
 
         D3D11Graphics(SDL_Window* window, const Math::Size& size);
         ~D3D11Graphics() override;
+
+        void Present() override;
     };
     
 }
