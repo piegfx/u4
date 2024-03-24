@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
     auto graphics = Graphics::CreateD3D11(window->Handle(), window->FramebufferSize());
 
     auto bitmap = Bitmap(R"(C:\Users\ollie\Pictures\awesomeface.png)");
+    auto texture = graphics->CreateTexture(bitmap);
 
     bool exists = true;
     while (exists) {

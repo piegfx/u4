@@ -19,6 +19,8 @@ namespace u4::Graphics::D3D11 {
         D3D11Graphics(SDL_Window* window, const Math::Size& size);
         ~D3D11Graphics() override;
 
+        std::unique_ptr<Texture> CreateTexture(const Bitmap& bitmap) override;
+        
         void Present() override;
     };
     

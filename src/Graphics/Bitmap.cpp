@@ -16,6 +16,8 @@ namespace u4::Graphics {
 
         _data = std::vector(data, data + (w * h * 4));
         _size = { w, h };
+
+        stbi_image_free(data);
     }
 
     const std::vector<uint8>& Bitmap::Data() const {

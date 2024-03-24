@@ -1,4 +1,5 @@
 ﻿#include "D3D11Graphics.h"
+#include "D3D11Texture.h"
 
 #include <SDL_syswm.h>
 #include <dxgi.h>
@@ -35,15 +36,15 @@ namespace u4::Graphics::D3D11 {
         if (FAILED(
             D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, &featureLevel, 1,
                 D3D11_SDK_VERSION, &swapChainDesc, &_swapChain, &Device, nullptr, &Context))) {
-            throw std::runtime_error("Failed to create D3D11 device.");
+            throw std::runtime_error("D3D11Graphics: Failed to create D3D11 device.");
         }
 
         if (FAILED(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**) &_swapChainTexture))) {
-            throw std::runtime_error("Failed to get swapchain buffer.");
+            throw std::runtime_error("D3D11Graphics: Failed to get swapchain buffer.");
         }
 
         if (FAILED(Device->CreateRenderTargetView(_swapChainTexture, nullptr, &_swapChainTarget))) {
-            throw std::runtime_error("Failed to create swapchain target.");
+            throw std::runtime_error("D3D11Graphics: Failed to create swapchain target.");
         }
     }
 
@@ -53,6 +54,10 @@ namespace u4::Graphics::D3D11 {
         _swapChain->Release();
         Context->Release();
         Device->Release();
+    }
+
+    std::unique_ptr<Texture> D3D11Graphics::CreateTexture(const Bitmap& bitmap) {
+        return std::make_unique<D3D11Texture>(Device, Context, bitmap.Size(), (void*) bitmap.Data().data());
     }
 
     void D3D11Graphics::Present() {

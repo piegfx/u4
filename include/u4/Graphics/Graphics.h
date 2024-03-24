@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "u4/Math/Size.h"
+#include "Texture.h"
+#include "Bitmap.h"
 
 #include <SDL.h>
 
@@ -11,6 +13,8 @@ namespace u4::Graphics {
     class Graphics {
     public:
         virtual ~Graphics() = default;
+
+        virtual std::unique_ptr<Texture> CreateTexture(const Bitmap& bitmap) = 0;
 
         virtual void Present() = 0;
 
